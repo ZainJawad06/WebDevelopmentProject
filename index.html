@@ -77,6 +77,19 @@
           </div>
 
           <div class="nav-user-group">
+            <!-- Cloud Connection Pill -->
+            <button
+              type="button"
+              id="cloud-status-pill"
+              class="filter-pill"
+              style="font-size: 0.78rem; padding: 0.35rem 0.85rem; display: flex; align-items: center; gap: 0.45rem;"
+              onclick="showCloudModal()"
+              title="Click for Supabase Cloud Database Status"
+            >
+              <span id="cloud-status-dot" style="width: 9px; height: 9px; border-radius: 50%; background-color: #ea580c; border: 1.5px solid #000;"></span>
+              <span id="cloud-status-text">Cloud Sync</span>
+            </button>
+
             <button type="button" class="nav-bell-btn" title="Notifications" onclick="alert('No new medication alerts today.')">
               <i data-lucide="bell" style="width: 18px; height: 18px;"></i>
               <span class="nav-bell-dot"></span>
@@ -92,11 +105,11 @@
           </div>
         </header>
 
-        <!-- Status Notification Banner -->
+        <!-- Brief Notification Toast -->
         <div id="status-banner" class="status-notification-banner" style="display: none;">
           <div style="display: flex; align-items: center; gap: 8px;">
             <i data-lucide="info" style="width: 16px; height: 16px;"></i>
-            <span id="status-text">Loading schedule...</span>
+            <span id="status-text"></span>
           </div>
           <button type="button" onclick="closeStatusBanner()" style="background: transparent; border: none; cursor: pointer;">
             <i data-lucide="x" style="width: 15px; height: 15px;"></i>
@@ -117,13 +130,13 @@
       </main>
     </div>
 
-    <!-- PURE JAVASCRIPT LOGIC (No React, No Vite, Pure Vanilla) -->
+    <!-- PURE JAVASCRIPT LOGIC (Auto-Sync, Resilient Cloud Connection) -->
     <script>
       // Project URL and public anon key. Safe to be public because Row Level Security controls access.
       const supabaseUrl = 'https://hsztbpkulujygxlaquxj.supabase.co';
       const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhzenRicGt1bHVqeWd4bGFxdXhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0MTAxNzQsImV4cCI6MjEwNjk4NjE3NH0.0KMFEwFgEhUmMrlYeSonyG409BfvUSSBB7bI9G4IvpY';
 
-      // Initialize Supabase Client via CDN library
+      // Initialize Supabase Client
       const supabaseClient = window.supabase ? window.supabase.createClient(supabaseUrl, supabaseAnonKey) : null;
 
       const STORAGE_KEY = 'mediremind_data';
@@ -140,23 +153,35 @@
       let activeSection = 'dashboard';
       let currentFilter = 'all';
       let searchQuery = '';
-      let isSubmitting = false;
+      let isCloudConnected = false;
 
-      // Saves data locally to state and localStorage
-      function saveLocally(updatedList) {
-        medicineList = updatedList;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedList));
-        renderApp();
+      // Update the cloud status pill in the navbar
+      function updateCloudStatusPill(connected) {
+        isCloudConnected = connected;
+        const dot = document.getElementById('cloud-status-dot');
+        const text = document.getElementById('cloud-status-text');
+        if (dot && text) {
+          if (connected) {
+            dot.style.backgroundColor = '#16a34a'; // Green
+            text.textContent = 'Cloud Active';
+          } else {
+            dot.style.backgroundColor = '#ea580c'; // Orange
+            text.textContent = 'Cloud Pending';
+          }
+        }
       }
 
-      // Shows notification banner with message
-      function showStatus(message) {
+      // Shows auto-dismissing toast notification
+      function showToast(message) {
         const banner = document.getElementById('status-banner');
         const text = document.getElementById('status-text');
         if (banner && text) {
           text.textContent = message;
           banner.style.display = 'flex';
           lucide.createIcons();
+          setTimeout(() => {
+            banner.style.display = 'none';
+          }, 3500);
         }
       }
 
@@ -165,10 +190,34 @@
         if (banner) banner.style.display = 'none';
       }
 
-      // SUPABASE CALL: Fetches medicines with local storage fallback
+      // Shows 1-click SQL setup dialog if cloud table is not ready
+      function showCloudModal() {
+        if (isCloudConnected) {
+          alert('Supabase Cloud is Active and fully connected! All changes sync automatically.');
+          return;
+        }
+
+        const openDashboard = confirm(
+          'Supabase Cloud Setup Needed:\n\n' +
+          'The "medicines" table is not created in your Supabase project yet.\n\n' +
+          'Click OK to open the Supabase SQL Editor directly in your browser. Then paste the SQL script to enable instant cloud syncing!'
+        );
+        if (openDashboard) {
+          window.open('https://supabase.com/dashboard/project/hsztbpkulujygxlaquxj/sql', '_blank');
+        }
+      }
+
+      // Saves data locally to state and localStorage
+      function saveLocally(updatedList) {
+        medicineList = updatedList;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedList));
+        renderApp();
+      }
+
+      // SUPABASE CALL: Fetches medicines from cloud with automatic sync
       async function fetchMedicines() {
         try {
-          if (!supabaseClient) throw new Error('Supabase library not loaded');
+          if (!supabaseClient) throw new Error('Supabase client not loaded');
 
           const { data, error } = await supabaseClient
             .from('medicines')
@@ -176,17 +225,32 @@
             .order('scheduled_time', { ascending: true });
 
           if (error) {
+            // Table doesn't exist yet in Supabase
+            updateCloudStatusPill(false);
             const localSaved = localStorage.getItem(STORAGE_KEY);
             medicineList = localSaved ? JSON.parse(localSaved) : demoMedicines;
-            showStatus('Local Mode Active: You can add and manage medicines. Run SQL in Supabase to sync to the cloud.');
-          } else if (data && data.length > 0) {
-            medicineList = data;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
           } else {
-            const localSaved = localStorage.getItem(STORAGE_KEY);
-            medicineList = localSaved ? JSON.parse(localSaved) : demoMedicines;
+            // Cloud is active!
+            updateCloudStatusPill(true);
+
+            if (data && data.length > 0) {
+              medicineList = data;
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            } else {
+              // Cloud table exists but is currently empty: upload existing local medicines!
+              const localSaved = localStorage.getItem(STORAGE_KEY);
+              const itemsToUpload = localSaved ? JSON.parse(localSaved) : demoMedicines;
+              medicineList = itemsToUpload;
+
+              for (const item of itemsToUpload) {
+                const { id, ...cleanData } = item;
+                await supabaseClient.from('medicines').insert([cleanData]);
+              }
+              showToast('Synced local medicines to Supabase Cloud!');
+            }
           }
         } catch (err) {
+          updateCloudStatusPill(false);
           const localSaved = localStorage.getItem(STORAGE_KEY);
           medicineList = localSaved ? JSON.parse(localSaved) : demoMedicines;
         } finally {
@@ -194,10 +258,22 @@
         }
       }
 
-      // SUPABASE CALL: Adds a new medicine and syncs
+      // Periodically check if table was created in Supabase (every 8 seconds)
+      setInterval(async () => {
+        if (!isCloudConnected && supabaseClient) {
+          try {
+            const { error } = await supabaseClient.from('medicines').select('id').limit(1);
+            if (!error) {
+              updateCloudStatusPill(true);
+              fetchMedicines();
+            }
+          } catch (e) {}
+        }
+      }, 8000);
+
+      // SUPABASE CALL: Adds a new medicine and syncs to cloud
       async function handleAddMedicine(event) {
         event.preventDefault();
-        if (isSubmitting) return;
 
         const nameInput = document.getElementById('form-med-name');
         const dosageInput = document.getElementById('form-med-dosage');
@@ -236,6 +312,9 @@
         stockInput.value = '30';
         notesInput.value = '';
 
+        showToast(`Registered ${name}!`);
+
+        // Sync to Supabase Cloud
         try {
           if (supabaseClient) {
             const { data, error } = await supabaseClient
@@ -243,15 +322,18 @@
               .insert([newMedicineData])
               .select();
 
-            if (error) {
-              showStatus('Saved locally! Run the SQL script in Supabase to sync to cloud.');
-            } else if (data && data[0]) {
-              saveLocally(medicineList.concat(data[0]));
-              showStatus('Medicine synced to Supabase Cloud!');
+            if (!error && data && data[0]) {
+              updateCloudStatusPill(true);
+              // Update with cloud database ID
+              const syncedList = medicineList.map((m) => m.id === localId ? data[0] : m);
+              saveLocally(syncedList);
+              showToast(`Synced ${name} to Supabase Cloud!`);
+            } else if (error) {
+              updateCloudStatusPill(false);
             }
           }
         } catch (err) {
-          // Local copy is already saved safely
+          updateCloudStatusPill(false);
         }
       }
 
@@ -269,15 +351,13 @@
         saveLocally(updatedList);
 
         try {
-          if (supabaseClient) {
+          if (supabaseClient && isCloudConnected) {
             await supabaseClient
               .from('medicines')
               .update({ is_taken: updatedStatus, stock: updatedStock })
               .eq('id', id);
           }
-        } catch (err) {
-          // Local state already updated
-        }
+        } catch (err) {}
       }
 
       // Quick restock (+5 doses)
@@ -289,6 +369,18 @@
           return item;
         });
         saveLocally(updatedList);
+
+        try {
+          if (supabaseClient && isCloudConnected) {
+            const updatedItem = updatedList.find((m) => m.id === id);
+            if (updatedItem) {
+              supabaseClient
+                .from('medicines')
+                .update({ stock: updatedItem.stock })
+                .eq('id', id);
+            }
+          }
+        } catch (err) {}
       }
 
       // SUPABASE CALL: Deletes a medicine reminder
@@ -299,19 +391,16 @@
         saveLocally(updatedList);
 
         try {
-          if (supabaseClient) {
+          if (supabaseClient && isCloudConnected) {
             await supabaseClient.from('medicines').delete().eq('id', id);
           }
-        } catch (err) {
-          // Local state already updated
-        }
+        } catch (err) {}
       }
 
       // Section Switching
       function setSection(section) {
         activeSection = section;
 
-        // Update active sidebar button state
         const navIds = ['dashboard', 'prescriptions', 'schedule', 'stock', 'saved'];
         navIds.forEach((id) => {
           const btn = document.getElementById(`nav-btn-${id}`);
@@ -339,7 +428,7 @@
         renderApp();
       }
 
-      // Filters the medicine list based on current active tab and search query
+      // Filters the medicine list based on active tab and search query
       function getFilteredMedicines() {
         return medicineList.filter((item) => {
           const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -409,7 +498,7 @@
           `;
         } else if (activeSection === 'schedule') {
           container.innerHTML = `
-            <section style="display: flex; flexDirection: column; gap: 1rem;">
+            <section style="display: flex; flex-direction: column; gap: 1.5rem;">
               <div class="section-header-row">
                 <h2 class="section-title">Full Medication Schedule</h2>
                 <button type="button" class="filter-pill active" onclick="setSection('dashboard')">&larr; Back to Dashboard</button>
@@ -421,14 +510,14 @@
           `;
         } else if (activeSection === 'stock') {
           container.innerHTML = `
-            <section style="display: flex; flexDirection: column; gap: 1rem;">
+            <section style="display: flex; flex-direction: column; gap: 1.5rem;">
               <div class="section-header-row">
                 <h2 class="section-title">Stock &amp; Inventory Tracker</h2>
                 <button type="button" class="filter-pill active" onclick="setSection('dashboard')">&larr; Back to Dashboard</button>
               </div>
               <div class="cards-row">
                 ${medicineList.map((item) => `
-                  <div class="prescription-card card-theme-yellow" style="min-height: 170px;">
+                  <div class="prescription-card card-theme-yellow" style="min-height: 180px;">
                     <h3 class="card-medicine-title">${item.name}</h3>
                     <p class="card-dosage-text">${item.dosage}</p>
                     <div class="card-stock-section">
@@ -451,7 +540,7 @@
           `;
         } else if (activeSection === 'saved') {
           container.innerHTML = `
-            <section style="display: flex; flexDirection: column; gap: 1rem;">
+            <section style="display: flex; flex-direction: column; gap: 1.5rem;">
               <div class="section-header-row">
                 <h2 class="section-title">Saved Prescriptions (${medicineList.length})</h2>
                 <button type="button" class="filter-pill active" onclick="setSection('dashboard')">&larr; Back to Dashboard</button>
@@ -565,7 +654,7 @@
         `;
       }
 
-      // Initialize on load
+      // Initialize on page load
       fetchMedicines();
     </script>
   </body>

@@ -29,7 +29,10 @@
 ## 2. Supabase SQL & Client Confirmation
 
 ### Supabase SQL to Run
-Run this SQL script in the **Supabase SQL Editor**:
+Open your project's SQL editor directly via this link:
+**[Supabase SQL Editor (hsztbpkulujygxlaquxj)](https://supabase.com/dashboard/project/hsztbpkulujygxlaquxj/sql)**
+
+Then paste and execute this SQL query:
 
 ```sql
 -- 1. Create medicines table with stock tracking
@@ -67,36 +70,3 @@ The Supabase URL and public anon key are confirmed hardcoded in `index.html` wit
 
 ---
 
-## 3. Viva Cheat-Sheet
-
-### File-by-File Explanation
-- **`index.html`**: The single HTML page hosting the complete web application structure, user interface layout, Supabase client integration via CDN, and vanilla JavaScript functions for state, stock tracking, and local/cloud synchronization.
-- **`styles.css`**: The sole global stylesheet declaring CSS variables, full-screen flex/grid layouts, Neobrutalist stark black borders, hard unblurred drop shadows, and tactile button animations.
-- **`README.md`**: Project overview and quick start guide explaining how to open the application directly in any browser with zero installation steps.
-
-### How Icons Work
-Icons are powered by the official **Lucide Icons CDN library** (`https://unpkg.com/lucide@latest`). HTML elements include `data-lucide="icon-name"` (such as `<i data-lucide="pill"></i>` or `<i data-lucide="check"></i>`). The JavaScript calls `lucide.createIcons()`, which dynamically converts each element into an inline, crisp SVG graphic with pure vector scaling.
-
-### How Animations Work
-- **`pageFadeIn`**: Animates `.dashboard-shell` from opacity `0` to `1` over 0.3s when the page initially mounts.
-- **`slideUp`**: Smoothly shifts `.prescription-card` and `.status-notification-banner` upwards by 8px while fading them in.
-- **`spin`**: Continuously rotates the loading spinner icon 360 degrees in an infinite linear loop during network requests.
-- **Neobrutalist Tactile Press Transitions**: On hover, cards and buttons translate up by `(-2px, -2px)` with expanded offset shadows (`4px 4px 0px #000`). On `:active` click, they press down by `(2px, 2px)` with shadows collapsing to zero for physical tactile feedback.
-
----
-
-## 4. Where to Change What
-
-| Desired Change | Target File | Line Number(s) | Code Snippet / Instruction |
-| :--- | :--- | :--- | :--- |
-| **Change accent coral colour** | `styles.css` | Line 12 | Modify `--accent-coral: #ff5b36;` to another hex code (e.g. `#0ea5e9` or `#10b981`). |
-| **Change pastel card colours** | `styles.css` | Lines 20–22 | Change `--card-yellow: #fde68a;`, `--card-purple: #e9d5ff;`, or `--card-blue: #bae6fd;`. |
-| **Change brand name / title** | `index.html` | Line 60 | Change `Welcome to <span>MediRemind</span>` to your chosen title. |
-| **Change team credit in footer** | `index.html` | Line 106 | Change `<p>MediRemind Digital Tracker &bull; Prepared by AIML C1</p>` to custom text. |
-| **Change "Register Medicine" button text** | `index.html` | Line 323 | Change `<span>Register Medicine</span>` to `'Schedule Dose'` or similar. |
-| **Change "Take Dose" / "Undo" button text** | `index.html` | Line 378 | Change `<span>${item.is_taken ? 'Undo' : 'Take Dose'}</span>` to your preferred labels. |
-| **Change sorting order of medicines** | `index.html` | Line 161 | Change `.order('scheduled_time', { ascending: true })` to `ascending: false` or `'name'`. |
-| **Change default stock quantity** | `index.html` | Line 317 | Change `value="30"` in the number input to any default stock number (e.g. `value="60"`). |
-| **Change an icon** | `index.html` | Lines 24, 27, 30 | Change `data-lucide="pill"` to another Lucide icon name like `data-lucide="heart-pulse"`. |
-| **Change animation speed** | `styles.css` | Lines 93, 317 | Modify `animation: pageFadeIn 0.3s` (Line 93) or `slideUp 0.3s` (Line 317) duration. |
-| **Change font family** | `styles.css` | Line 46 | Modify `--font-stack: 'Plus Jakarta Sans', system-ui, sans-serif;` to another font. |
