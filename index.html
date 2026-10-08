@@ -3,14 +3,570 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="A simple, reliable daily medicine reminder application with stock tracking and personalized prescriptions." />
+    <meta name="description" content="MediRemind - Full-screen Neobrutalist Medicine Reminder & Stock Tracker Web Application." />
+    <title>MediRemind - Smart Medicine Reminder & Stock Tracker</title>
+    
+    <!-- Soft and Polished Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <title>MediRemind - Smart Medicine Reminder & Stock Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Neobrutalism Global Stylesheet -->
+    <link rel="stylesheet" href="styles.css" />
+
+    <!-- Supabase Official Client via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Lucide Icons via CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <div class="dashboard-shell">
+      <!-- Slim Dark Neobrutalist Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-menu">
+          <button type="button" class="sidebar-btn active" id="nav-btn-dashboard" onclick="setSection('dashboard')" title="Overview Dashboard">
+            <i data-lucide="layout-grid"></i>
+          </button>
+          <button type="button" class="sidebar-btn" id="nav-btn-prescriptions" onclick="setSection('prescriptions')" title="My Prescriptions">
+            <i data-lucide="pill"></i>
+          </button>
+          <button type="button" class="sidebar-btn" id="nav-btn-schedule" onclick="setSection('schedule')" title="Intake Schedule">
+            <i data-lucide="calendar-check"></i>
+          </button>
+          <button type="button" class="sidebar-btn" id="nav-btn-stock" onclick="setSection('stock')" title="Stock & Inventory">
+            <i data-lucide="package"></i>
+          </button>
+          <button type="button" class="sidebar-btn" id="nav-btn-saved" onclick="setSection('saved')" title="Saved Medicines">
+            <i data-lucide="bookmark"></i>
+          </button>
+        </div>
+
+        <div class="sidebar-footer">
+          <button type="button" class="sidebar-btn" title="Support & Help" onclick="alert('MediRemind 24/7 Patient Assistance')">
+            <i data-lucide="headphones"></i>
+          </button>
+          <button type="button" class="sidebar-btn" title="Settings" onclick="alert('Settings: Notification & reminder preferences')">
+            <i data-lucide="settings"></i>
+          </button>
+          <button type="button" class="sidebar-btn" title="Reset / Reload" onclick="if(confirm('Reload schedule?')) window.location.reload();">
+            <i data-lucide="log-out"></i>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Full-Screen Canvas Area -->
+      <main class="main-canvas">
+        <!-- Top Navbar Header -->
+        <header class="top-navbar">
+          <div class="nav-brand">
+            Welcome to <span>MediRemind</span>
+          </div>
+
+          <div class="nav-search-wrap">
+            <input
+              type="text"
+              id="search-input"
+              class="nav-search-input"
+              placeholder="Search your medicines..."
+              oninput="handleSearch(this.value)"
+            />
+            <button type="button" class="nav-search-btn" title="Search">
+              <i data-lucide="search" style="width: 15px; height: 15px;"></i>
+            </button>
+          </div>
+
+          <div class="nav-user-group">
+            <button type="button" class="nav-bell-btn" title="Notifications" onclick="alert('No new medication alerts today.')">
+              <i data-lucide="bell" style="width: 18px; height: 18px;"></i>
+              <span class="nav-bell-dot"></span>
+            </button>
+
+            <div class="nav-profile">
+              <div class="nav-avatar">SJ</div>
+              <div class="nav-profile-text">
+                <span class="nav-profile-name">Sarah Jenkins</span>
+                <span class="nav-profile-role">Patient Portal</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Status Notification Banner -->
+        <div id="status-banner" class="status-notification-banner" style="display: none;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="info" style="width: 16px; height: 16px;"></i>
+            <span id="status-text">Loading schedule...</span>
+          </div>
+          <button type="button" onclick="closeStatusBanner()" style="background: transparent; border: none; cursor: pointer;">
+            <i data-lucide="x" style="width: 15px; height: 15px;"></i>
+          </button>
+        </div>
+
+        <!-- VIEW CONTAINER -->
+        <div id="view-container"></div>
+
+        <!-- Footer -->
+        <footer class="canvas-footer">
+          <div class="footer-health-notice">
+            <i data-lucide="shield-check" style="width: 16px; height: 16px;"></i>
+            <span>Always consult your physician before altering prescribed dosages.</span>
+          </div>
+          <p>MediRemind Digital Tracker &bull; Prepared by AIML C1</p>
+        </footer>
+      </main>
+    </div>
+
+    <!-- PURE JAVASCRIPT LOGIC (No React, No Vite, Pure Vanilla) -->
+    <script>
+      // Project URL and public anon key. Safe to be public because Row Level Security controls access.
+      const supabaseUrl = 'https://hsztbpkulujygxlaquxj.supabase.co';
+      const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhzenRicGt1bHVqeWd4bGFxdXhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0MTAxNzQsImV4cCI6MjEwNjk4NjE3NH0.0KMFEwFgEhUmMrlYeSonyG409BfvUSSBB7bI9G4IvpY';
+
+      // Initialize Supabase Client via CDN library
+      const supabaseClient = window.supabase ? window.supabase.createClient(supabaseUrl, supabaseAnonKey) : null;
+
+      const STORAGE_KEY = 'mediremind_data';
+
+      // Default initial prescriptions matching the reference UI
+      const demoMedicines = [
+        { id: 101, name: 'Amoxicillin', dosage: '500mg, 1 capsule', scheduled_time: '08:00', stock: 22, notes: 'Take after breakfast', is_taken: false },
+        { id: 102, name: 'Vitamin D3', dosage: '1000 IU, 1 drop', scheduled_time: '13:00', stock: 12, notes: 'Take with water', is_taken: true },
+        { id: 103, name: 'Metformin', dosage: '500mg, 1 tablet', scheduled_time: '20:30', stock: 4, notes: 'Take with dinner', is_taken: false }
+      ];
+
+      // Application State
+      let medicineList = [];
+      let activeSection = 'dashboard';
+      let currentFilter = 'all';
+      let searchQuery = '';
+      let isSubmitting = false;
+
+      // Saves data locally to state and localStorage
+      function saveLocally(updatedList) {
+        medicineList = updatedList;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedList));
+        renderApp();
+      }
+
+      // Shows notification banner with message
+      function showStatus(message) {
+        const banner = document.getElementById('status-banner');
+        const text = document.getElementById('status-text');
+        if (banner && text) {
+          text.textContent = message;
+          banner.style.display = 'flex';
+          lucide.createIcons();
+        }
+      }
+
+      function closeStatusBanner() {
+        const banner = document.getElementById('status-banner');
+        if (banner) banner.style.display = 'none';
+      }
+
+      // SUPABASE CALL: Fetches medicines with local storage fallback
+      async function fetchMedicines() {
+        try {
+          if (!supabaseClient) throw new Error('Supabase library not loaded');
+
+          const { data, error } = await supabaseClient
+            .from('medicines')
+            .select('*')
+            .order('scheduled_time', { ascending: true });
+
+          if (error) {
+            const localSaved = localStorage.getItem(STORAGE_KEY);
+            medicineList = localSaved ? JSON.parse(localSaved) : demoMedicines;
+            showStatus('Local Mode Active: You can add and manage medicines. Run SQL in Supabase to sync to the cloud.');
+          } else if (data && data.length > 0) {
+            medicineList = data;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+          } else {
+            const localSaved = localStorage.getItem(STORAGE_KEY);
+            medicineList = localSaved ? JSON.parse(localSaved) : demoMedicines;
+          }
+        } catch (err) {
+          const localSaved = localStorage.getItem(STORAGE_KEY);
+          medicineList = localSaved ? JSON.parse(localSaved) : demoMedicines;
+        } finally {
+          renderApp();
+        }
+      }
+
+      // SUPABASE CALL: Adds a new medicine and syncs
+      async function handleAddMedicine(event) {
+        event.preventDefault();
+        if (isSubmitting) return;
+
+        const nameInput = document.getElementById('form-med-name');
+        const dosageInput = document.getElementById('form-med-dosage');
+        const timeInput = document.getElementById('form-med-time');
+        const stockInput = document.getElementById('form-med-stock');
+        const notesInput = document.getElementById('form-med-notes');
+
+        const name = nameInput.value.trim();
+        const dosage = dosageInput.value.trim();
+        const scheduled_time = timeInput.value;
+        const stock = Number(stockInput.value) > 0 ? Number(stockInput.value) : 10;
+        const notes = notesInput.value.trim();
+
+        if (!name || !dosage || !scheduled_time) {
+          alert('Please fill in medicine name, dosage, and scheduled time.');
+          return;
+        }
+
+        const newMedicineData = {
+          name,
+          dosage,
+          scheduled_time,
+          stock,
+          notes,
+          is_taken: false
+        };
+
+        const localId = Date.now();
+        const temporaryItem = { ...newMedicineData, id: localId };
+        saveLocally([...medicineList, temporaryItem]);
+
+        // Reset form inputs
+        nameInput.value = '';
+        dosageInput.value = '';
+        timeInput.value = '';
+        stockInput.value = '30';
+        notesInput.value = '';
+
+        try {
+          if (supabaseClient) {
+            const { data, error } = await supabaseClient
+              .from('medicines')
+              .insert([newMedicineData])
+              .select();
+
+            if (error) {
+              showStatus('Saved locally! Run the SQL script in Supabase to sync to cloud.');
+            } else if (data && data[0]) {
+              saveLocally(medicineList.concat(data[0]));
+              showStatus('Medicine synced to Supabase Cloud!');
+            }
+          }
+        } catch (err) {
+          // Local copy is already saved safely
+        }
+      }
+
+      // SUPABASE CALL: Toggles taken status and decrements/restores stock count
+      async function handleToggleTaken(id, currentStatus, currentStock) {
+        const updatedStatus = !currentStatus;
+        const updatedStock = updatedStatus ? Math.max(0, currentStock - 1) : currentStock + 1;
+
+        const updatedList = medicineList.map((item) => {
+          if (item.id === id) {
+            return { ...item, is_taken: updatedStatus, stock: updatedStock };
+          }
+          return item;
+        });
+        saveLocally(updatedList);
+
+        try {
+          if (supabaseClient) {
+            await supabaseClient
+              .from('medicines')
+              .update({ is_taken: updatedStatus, stock: updatedStock })
+              .eq('id', id);
+          }
+        } catch (err) {
+          // Local state already updated
+        }
+      }
+
+      // Quick restock (+5 doses)
+      function handleRestock(id) {
+        const updatedList = medicineList.map((item) => {
+          if (item.id === id) {
+            return { ...item, stock: (Number(item.stock) || 0) + 5 };
+          }
+          return item;
+        });
+        saveLocally(updatedList);
+      }
+
+      // SUPABASE CALL: Deletes a medicine reminder
+      async function handleDeleteMedicine(id, name) {
+        if (!confirm(`Remove ${name} from schedule?`)) return;
+
+        const updatedList = medicineList.filter((item) => item.id !== id);
+        saveLocally(updatedList);
+
+        try {
+          if (supabaseClient) {
+            await supabaseClient.from('medicines').delete().eq('id', id);
+          }
+        } catch (err) {
+          // Local state already updated
+        }
+      }
+
+      // Section Switching
+      function setSection(section) {
+        activeSection = section;
+
+        // Update active sidebar button state
+        const navIds = ['dashboard', 'prescriptions', 'schedule', 'stock', 'saved'];
+        navIds.forEach((id) => {
+          const btn = document.getElementById(`nav-btn-${id}`);
+          if (btn) {
+            if (id === section || (section === 'prescriptions' && id === 'dashboard')) {
+              btn.classList.add('active');
+            } else {
+              btn.classList.remove('active');
+            }
+          }
+        });
+
+        renderApp();
+      }
+
+      // Filter Switching
+      function setFilter(filter) {
+        currentFilter = filter;
+        renderApp();
+      }
+
+      // Search Filtering
+      function handleSearch(query) {
+        searchQuery = query;
+        renderApp();
+      }
+
+      // Filters the medicine list based on current active tab and search query
+      function getFilteredMedicines() {
+        return medicineList.filter((item) => {
+          const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
+          const stockVal = item.stock !== undefined && item.stock !== null ? Number(item.stock) : 15;
+
+          if (!matchesSearch) return false;
+          if (currentFilter === 'pending') return item.is_taken === false;
+          if (currentFilter === 'taken') return item.is_taken === true;
+          if (currentFilter === 'low_stock') return stockVal <= 5;
+          return true;
+        });
+      }
+
+      // HTML Renderers for Sections
+      function renderApp() {
+        const container = document.getElementById('view-container');
+        if (!container) return;
+
+        const filtered = getFilteredMedicines();
+
+        if (activeSection === 'dashboard' || activeSection === 'prescriptions') {
+          container.innerHTML = `
+            <section class="section-header-row">
+              <h2 class="section-title">My Prescriptions</h2>
+              <div class="filter-pill-group">
+                <button type="button" class="filter-pill ${currentFilter === 'all' ? 'active' : ''}" onclick="setFilter('all')">All Prescriptions</button>
+                <button type="button" class="filter-pill ${currentFilter === 'pending' ? 'active' : ''}" onclick="setFilter('pending')">Pending</button>
+                <button type="button" class="filter-pill ${currentFilter === 'taken' ? 'active' : ''}" onclick="setFilter('taken')">Taken</button>
+                <button type="button" class="filter-pill ${currentFilter === 'low_stock' ? 'active' : ''}" onclick="setFilter('low_stock')">Low Stock</button>
+              </div>
+            </section>
+
+            <section class="cards-row">
+              ${filtered.slice(0, 3).map((item, idx) => renderPastelCard(item, idx)).join('')}
+              ${filtered.length === 0 ? '<p style="grid-column: 1 / -1; color: #52525b; font-weight: 700;">No prescriptions match this filter.</p>' : ''}
+            </section>
+
+            <section class="bottom-grid">
+              <div class="schedule-panel">
+                <div class="panel-header-row">
+                  <h3 class="panel-title">Daily Intake Schedule</h3>
+                  <button type="button" class="panel-subtitle-link" style="background: transparent; border: none;" onclick="setSection('schedule')">
+                    View all lessons &bull;
+                  </button>
+                </div>
+                ${renderScheduleRows(filtered)}
+              </div>
+
+              <div class="dark-form-panel">
+                <span class="dark-card-tag">Stock &amp; Inventory</span>
+                <h3 class="dark-card-title">Add Your Specific Medicine</h3>
+                <form class="dark-form-fields" onsubmit="handleAddMedicine(event)">
+                  <input id="form-med-name" class="dark-input" type="text" placeholder="Medicine name (e.g. Paracetamol)" required />
+                  <input id="form-med-dosage" class="dark-input" type="text" placeholder="Dosage (e.g. 500mg, 1 tablet)" required />
+                  <div class="dark-input-row">
+                    <input id="form-med-time" class="dark-input" type="time" required />
+                    <input id="form-med-stock" class="dark-input" type="number" min="1" max="200" value="30" placeholder="Stock (pills)" required />
+                  </div>
+                  <input id="form-med-notes" class="dark-input" type="text" placeholder="Notes (optional, e.g. after food)" />
+                  <button type="submit" class="btn-dark-submit">
+                    <i data-lucide="plus-circle" style="width: 18px; height: 18px;"></i>
+                    <span>Register Medicine</span>
+                  </button>
+                </form>
+              </div>
+            </section>
+          `;
+        } else if (activeSection === 'schedule') {
+          container.innerHTML = `
+            <section style="display: flex; flexDirection: column; gap: 1rem;">
+              <div class="section-header-row">
+                <h2 class="section-title">Full Medication Schedule</h2>
+                <button type="button" class="filter-pill active" onclick="setSection('dashboard')">&larr; Back to Dashboard</button>
+              </div>
+              <div class="schedule-panel">
+                ${renderScheduleRows(filtered)}
+              </div>
+            </section>
+          `;
+        } else if (activeSection === 'stock') {
+          container.innerHTML = `
+            <section style="display: flex; flexDirection: column; gap: 1rem;">
+              <div class="section-header-row">
+                <h2 class="section-title">Stock &amp; Inventory Tracker</h2>
+                <button type="button" class="filter-pill active" onclick="setSection('dashboard')">&larr; Back to Dashboard</button>
+              </div>
+              <div class="cards-row">
+                ${medicineList.map((item) => `
+                  <div class="prescription-card card-theme-yellow" style="min-height: 170px;">
+                    <h3 class="card-medicine-title">${item.name}</h3>
+                    <p class="card-dosage-text">${item.dosage}</p>
+                    <div class="card-stock-section">
+                      <div class="stock-label-row">
+                        <span>Remaining: ${item.stock || 0} doses</span>
+                        <span>${(item.stock || 0) <= 5 ? 'Restock Needed!' : 'Sufficient'}</span>
+                      </div>
+                    </div>
+                    <div class="card-bottom-row">
+                      <span class="stock-pill-badge">${item.scheduled_time}</span>
+                      <button type="button" class="btn-continue" onclick="handleRestock(${item.id})">
+                        <i data-lucide="refresh-cw" style="width: 12px; height: 12px;"></i>
+                        <span>+5 Refill</span>
+                      </button>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </section>
+          `;
+        } else if (activeSection === 'saved') {
+          container.innerHTML = `
+            <section style="display: flex; flexDirection: column; gap: 1rem;">
+              <div class="section-header-row">
+                <h2 class="section-title">Saved Prescriptions (${medicineList.length})</h2>
+                <button type="button" class="filter-pill active" onclick="setSection('dashboard')">&larr; Back to Dashboard</button>
+              </div>
+              <div class="cards-row">
+                ${medicineList.map((item, idx) => renderPastelCard(item, idx)).join('')}
+              </div>
+            </section>
+          `;
+        }
+
+        // Initialize Lucide icons on dynamic elements
+        lucide.createIcons();
+      }
+
+      function renderPastelCard(item, index) {
+        const colorThemes = ['card-theme-yellow', 'card-theme-purple', 'card-theme-blue'];
+        const themeClass = colorThemes[index % colorThemes.length];
+        const currentStock = item.stock !== undefined && item.stock !== null ? Number(item.stock) : 15;
+        const totalStock = 30;
+        const stockPercentage = Math.min(100, Math.max(0, Math.round((currentStock / totalStock) * 100)));
+        const isLowStock = currentStock <= 5;
+
+        return `
+          <div class="prescription-card ${themeClass}">
+            <div class="card-top-bar">
+              <span class="card-tag">
+                <i data-lucide="package" style="width: 12px; height: 12px;"></i>
+                <span>${item.scheduled_time || 'Daily'}</span>
+              </span>
+              <i data-lucide="bookmark" class="card-bookmark-icon" style="width: 18px; height: 18px;"></i>
+            </div>
+
+            <h3 class="card-medicine-title">${item.name}</h3>
+            <p class="card-dosage-text">${item.dosage}</p>
+
+            <div class="card-stock-section">
+              <div class="stock-label-row">
+                <span>Stock Level</span>
+                <span>${currentStock} / ${totalStock} doses</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill ${isLowStock ? 'low-stock' : ''}" style="width: ${stockPercentage}%;"></div>
+              </div>
+            </div>
+
+            <div class="card-bottom-row">
+              <span class="stock-pill-badge">${isLowStock ? 'Low Stock!' : currentStock + ' left'}</span>
+              <button
+                type="button"
+                class="btn-continue ${item.is_taken ? 'completed' : ''}"
+                onclick="handleToggleTaken(${item.id}, ${item.is_taken}, ${currentStock})"
+              >
+                <i data-lucide="${item.is_taken ? 'rotate-ccw' : 'check'}" style="width: 13px; height: 13px;"></i>
+                <span>${item.is_taken ? 'Undo' : 'Take Dose'}</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderScheduleRows(list) {
+        if (list.length === 0) {
+          return `
+            <div class="state-box">
+              <i data-lucide="pill" style="width: 32px; height: 32px; color: #94a3b8;"></i>
+              <p>No medicines scheduled yet. Add your specific prescription on the right.</p>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="schedule-list">
+            ${list.map((item) => {
+              const stockCount = item.stock !== undefined && item.stock !== null ? Number(item.stock) : 15;
+              const isLow = stockCount <= 5;
+
+              return `
+                <div class="schedule-row">
+                  <div class="schedule-item-info">
+                    <button
+                      type="button"
+                      class="schedule-bullet-pill ${item.is_taken ? 'taken' : ''}"
+                      onclick="handleToggleTaken(${item.id}, ${item.is_taken}, ${stockCount})"
+                      title="${item.is_taken ? 'Mark as pending' : 'Mark as taken'}"
+                    >
+                      <i data-lucide="${item.is_taken ? 'check' : 'clock'}" style="width: 16px; height: 16px;"></i>
+                    </button>
+                    <div class="schedule-text-details">
+                      <span class="schedule-name ${item.is_taken ? 'strike' : ''}">${item.name}</span>
+                      <span class="schedule-sub">${item.dosage} ${item.notes ? `• ${item.notes}` : ''}</span>
+                    </div>
+                  </div>
+
+                  <div class="schedule-meta-right">
+                    <span class="schedule-stock-tag ${isLow ? 'warning' : ''}">${isLow ? `Low: ${stockCount} left` : `${stockCount} in stock`}</span>
+                    <span class="schedule-time-label">${item.scheduled_time}</span>
+                    <button
+                      type="button"
+                      class="schedule-action-btn"
+                      onclick="handleDeleteMedicine(${item.id}, '${item.name}')"
+                      title="Delete reminder"
+                    >
+                      <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+                    </button>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      }
+
+      // Initialize on load
+      fetchMedicines();
+    </script>
   </body>
 </html>

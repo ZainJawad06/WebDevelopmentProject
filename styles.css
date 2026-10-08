@@ -1,5 +1,5 @@
-/* src/styles.css */
-/* Global stylesheet for the Medicine Reminder application in full-screen Neobrutalism design style. */
+/* styles.css */
+/* Global stylesheet for the Medicine Reminder application in full-screen Neobrutalism design style with generous, balanced spacing. */
 
 :root {
   /* Neobrutalist High-Contrast Color Palette */
@@ -32,9 +32,9 @@
   --shadow-neo-lg: 6px 6px 0px #000000;
 
   /* Corner Radii */
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
   --radius-pill: 9999px;
 
   /* Soft and Polished Font */
@@ -52,7 +52,7 @@ body {
   font-family: var(--font-stack);
   background-color: var(--bg-page);
   color: #000000;
-  line-height: 1.45;
+  line-height: 1.5;
   min-height: 100vh;
   width: 100vw;
   overflow-x: hidden;
@@ -101,28 +101,28 @@ body {
 
 /* Slim Dark Sidebar with Neobrutalist Thick Border */
 .sidebar {
-  width: 78px;
+  width: 82px;
   background-color: var(--bg-sidebar);
   border-right: var(--border-heavy);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 0.5rem;
+  padding: 1.75rem 0.65rem;
   flex-shrink: 0;
 }
 
 .sidebar-menu {
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
+  gap: 1.25rem;
   align-items: center;
   width: 100%;
 }
 
 .sidebar-btn {
-  width: 48px;
-  height: 48px;
+  width: 50px;
+  height: 50px;
   border-radius: var(--radius-md);
   background-color: #27272a;
   border: 2px solid transparent;
@@ -158,17 +158,17 @@ body {
 .sidebar-footer {
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
+  gap: 1rem;
   align-items: center;
 }
 
-/* Main Full Screen Canvas */
+/* Main Full Screen Canvas with Generous Spacing */
 .main-canvas {
   flex: 1;
-  padding: 1.75rem 2.5rem;
+  padding: 2rem 3rem 2.5rem 3rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
   background-color: var(--bg-canvas);
   overflow-y: auto;
   max-width: 100%;
@@ -179,14 +179,15 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.25rem;
+  gap: 1.5rem;
   flex-wrap: wrap;
-  padding-bottom: 0.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 2px solid #e4e4e7;
 }
 
 .nav-brand {
-  font-size: 1.5rem;
-  font-weight: 800;
+  font-size: 1.6rem;
+  font-weight: 900;
   color: #000000;
   letter-spacing: -0.02em;
 }
@@ -204,8 +205,8 @@ body {
   background-color: #ffffff;
   border: var(--border-thick);
   border-radius: var(--radius-pill);
-  padding: 0.3rem 0.5rem 0.3rem 1rem;
-  width: 320px;
+  padding: 0.35rem 0.6rem 0.35rem 1.15rem;
+  width: 340px;
   box-shadow: var(--shadow-neo-sm);
   /* Smooth shadow change on search focus. */
   transition: transform 0.12s ease, box-shadow 0.12s ease;
@@ -219,7 +220,7 @@ body {
 .nav-search-input {
   border: none;
   outline: none;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   font-family: inherit;
   font-weight: 600;
   flex: 1;
@@ -228,8 +229,8 @@ body {
 }
 
 .nav-search-btn {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: var(--radius-pill);
   border: 2px solid #000000;
   background-color: var(--accent-coral);
@@ -249,12 +250,12 @@ body {
 .nav-user-group {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.1rem;
 }
 
 .nav-bell-btn {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius-pill);
   border: var(--border-thick);
   background-color: #ffffff;
@@ -281,8 +282,8 @@ body {
 
 .nav-bell-dot {
   position: absolute;
-  top: 9px;
-  right: 9px;
+  top: 10px;
+  right: 10px;
   width: 8px;
   height: 8px;
   background-color: var(--accent-coral);
@@ -293,17 +294,17 @@ body {
 .nav-profile {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.75rem;
 }
 
 .nav-avatar {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius-pill);
   background-color: var(--accent-yellow);
   color: #000000;
   font-weight: 800;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -317,13 +318,13 @@ body {
 }
 
 .nav-profile-name {
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   font-weight: 800;
   color: #000000;
 }
 
 .nav-profile-role {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   color: #52525b;
   font-weight: 700;
 }
@@ -334,14 +335,22 @@ body {
   border: var(--border-thick);
   box-shadow: var(--shadow-neo-sm);
   color: #000000;
-  padding: 0.75rem 1.1rem;
+  padding: 0.85rem 1.25rem;
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 700;
   animation: slideUp 0.25s ease-out;
+}
+
+/* VIEW CONTAINER: Provides Clean Vertical Cadence Between Sections */
+#view-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  width: 100%;
 }
 
 /* Section Header & Neobrutalist Filter Pills */
@@ -349,12 +358,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 1.25rem;
   flex-wrap: wrap;
+  margin-bottom: 0.25rem;
 }
 
 .section-title {
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   font-weight: 900;
   color: #000000;
   letter-spacing: -0.03em;
@@ -363,7 +373,7 @@ body {
 .filter-pill-group {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.75rem;
   flex-wrap: wrap;
 }
 
@@ -371,9 +381,9 @@ body {
   border: var(--border-thick);
   background-color: #ffffff;
   color: #000000;
-  padding: 0.45rem 1rem;
+  padding: 0.5rem 1.15rem;
   border-radius: var(--radius-pill);
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 800;
   font-family: inherit;
   cursor: pointer;
@@ -399,21 +409,21 @@ body {
   box-shadow: var(--shadow-neo-sm);
 }
 
-/* Top Prescriptions Cards Row (Neobrutalist Pastel Cards) */
+/* Top Prescriptions Cards Row with Generous Card Spacing */
 .cards-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .prescription-card {
   border: var(--border-heavy);
   border-radius: var(--radius-lg);
-  padding: 1.35rem;
+  padding: 1.65rem 1.5rem 1.5rem 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 220px;
+  min-height: 240px;
   box-shadow: var(--shadow-neo-md);
   /* Interactive hover lift and offset shadow response. */
   transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -441,20 +451,20 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1.1rem;
 }
 
 .card-tag {
   background-color: #000000;
   color: #ffffff;
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 800;
-  padding: 0.25rem 0.65rem;
+  padding: 0.3rem 0.75rem;
   border-radius: var(--radius-pill);
   border: 1.5px solid #000000;
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.4rem;
 }
 
 .card-bookmark-icon {
@@ -462,18 +472,18 @@ body {
 }
 
 .card-medicine-title {
-  font-size: 1.3rem;
+  font-size: 1.35rem;
   font-weight: 900;
   color: #000000;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.35rem;
   line-height: 1.25;
 }
 
 .card-dosage-text {
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   color: #27272a;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 /* Progress / Stock Bar */
@@ -481,21 +491,22 @@ body {
   margin-top: auto;
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.55rem;
+  padding-top: 0.5rem;
 }
 
 .stock-label-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 800;
   color: #000000;
 }
 
 .progress-track {
   width: 100%;
-  height: 9px;
+  height: 10px;
   background-color: #ffffff;
   border: 2px solid #000000;
   border-radius: var(--radius-pill);
@@ -518,17 +529,17 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 1rem;
-  gap: 0.5rem;
+  margin-top: 1.35rem;
+  gap: 0.65rem;
 }
 
 .stock-pill-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  font-size: 0.78rem;
+  gap: 0.35rem;
+  font-size: 0.8rem;
   font-weight: 800;
-  padding: 0.3rem 0.6rem;
+  padding: 0.35rem 0.75rem;
   border-radius: var(--radius-sm);
   background-color: #ffffff;
   color: #000000;
@@ -541,14 +552,14 @@ body {
   color: #ffffff;
   border: var(--border-thick);
   font-weight: 800;
-  font-size: 0.825rem;
-  padding: 0.5rem 1.15rem;
+  font-size: 0.85rem;
+  padding: 0.55rem 1.25rem;
   border-radius: var(--radius-pill);
   cursor: pointer;
   box-shadow: var(--shadow-neo-sm);
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.45rem;
   /* Neobrutalist interactive tactile press animation. */
   transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
 }
@@ -569,11 +580,11 @@ body {
   color: #000000;
 }
 
-/* Bottom Split Layout */
+/* Bottom Split Layout with Generous Separation */
 .bottom-grid {
   display: grid;
   grid-template-columns: 1.55fr 1fr;
-  gap: 1.5rem;
+  gap: 2.25rem;
   align-items: stretch;
 }
 
@@ -582,7 +593,7 @@ body {
   background-color: #ffffff;
   border: var(--border-heavy);
   border-radius: var(--radius-lg);
-  padding: 1.5rem 1.75rem;
+  padding: 1.85rem 2rem;
   box-shadow: var(--shadow-neo-md);
   display: flex;
   flex-direction: column;
@@ -592,19 +603,19 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1.1rem;
-  padding-bottom: 0.85rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
   border-bottom: 2px solid #000000;
 }
 
 .panel-title {
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: 900;
   color: #000000;
 }
 
 .panel-subtitle-link {
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   font-weight: 800;
   color: var(--accent-coral);
   cursor: pointer;
@@ -615,17 +626,18 @@ body {
 .schedule-list {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .schedule-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem 0.85rem;
+  padding: 1rem 1.15rem;
   border-radius: var(--radius-md);
   border: 2px solid #e4e4e7;
   background-color: #fafafa;
+  gap: 1.25rem;
   /* Smooth row hover color and border transition. */
   transition: border-color 0.12s ease, background-color 0.12s ease, transform 0.12s ease;
 }
@@ -639,13 +651,13 @@ body {
 .schedule-item-info {
   display: flex;
   align-items: center;
-  gap: 0.95rem;
+  gap: 1.15rem;
   flex: 1;
 }
 
 .schedule-bullet-pill {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background-color: #fed7aa;
   border: 2px solid #000000;
@@ -672,10 +684,11 @@ body {
 .schedule-text-details {
   display: flex;
   flex-direction: column;
+  gap: 0.2rem;
 }
 
 .schedule-name {
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 800;
   color: #000000;
 }
@@ -687,7 +700,7 @@ body {
 }
 
 .schedule-sub {
-  font-size: 0.78rem;
+  font-size: 0.825rem;
   color: #52525b;
   font-weight: 600;
 }
@@ -695,13 +708,13 @@ body {
 .schedule-meta-right {
   display: flex;
   align-items: center;
-  gap: 1.1rem;
+  gap: 1.35rem;
 }
 
 .schedule-stock-tag {
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 800;
-  padding: 0.25rem 0.6rem;
+  padding: 0.3rem 0.7rem;
   border-radius: var(--radius-pill);
   background-color: #ffffff;
   color: #000000;
@@ -715,7 +728,7 @@ body {
 }
 
 .schedule-time-label {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 800;
   color: #000000;
   min-width: 65px;
@@ -730,7 +743,7 @@ body {
   color: #dc2626;
   display: flex;
   align-items: center;
-  padding: 0.4rem;
+  padding: 0.45rem;
   border-radius: var(--radius-sm);
   /* Interactive button click transition. */
   transition: transform 0.12s ease, box-shadow 0.12s ease;
@@ -752,7 +765,7 @@ body {
   color: #ffffff;
   border: var(--border-heavy);
   border-radius: var(--radius-lg);
-  padding: 1.65rem;
+  padding: 1.85rem 2rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -762,45 +775,45 @@ body {
 .dark-card-tag {
   background-color: var(--accent-yellow);
   color: #000000;
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 900;
-  padding: 0.25rem 0.75rem;
+  padding: 0.3rem 0.85rem;
   border-radius: var(--radius-pill);
   border: 2px solid #000000;
   box-shadow: var(--shadow-neo-sm);
   display: inline-block;
   align-self: flex-start;
-  margin-bottom: 0.85rem;
+  margin-bottom: 1rem;
 }
 
 .dark-card-title {
-  font-size: 1.35rem;
+  font-size: 1.4rem;
   font-weight: 900;
   line-height: 1.3;
-  margin-bottom: 1.1rem;
+  margin-bottom: 1.35rem;
 }
 
 .dark-form-fields {
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 1rem;
 }
 
 .dark-input-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
+  gap: 0.85rem;
 }
 
 .dark-input {
   width: 100%;
-  padding: 0.65rem 0.85rem;
+  padding: 0.75rem 0.95rem;
   background-color: #27272a;
   border: 2px solid #000000;
   box-shadow: var(--shadow-neo-sm);
   border-radius: var(--radius-sm);
   color: #ffffff;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   font-family: inherit;
   font-weight: 600;
   outline: none;
@@ -825,15 +838,15 @@ body {
   border: var(--border-heavy);
   box-shadow: var(--shadow-neo-md);
   font-weight: 900;
-  font-size: 0.95rem;
-  padding: 0.85rem 1rem;
+  font-size: 1rem;
+  padding: 0.95rem 1.25rem;
   border-radius: var(--radius-md);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  margin-top: 1.1rem;
+  gap: 0.55rem;
+  margin-top: 1.35rem;
   /* Tactile button press effect on active click. */
   transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
 }
@@ -856,13 +869,13 @@ body {
 
 /* States & Empty Box */
 .state-box {
-  padding: 2.5rem 1rem;
+  padding: 3rem 1.5rem;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.6rem;
+  gap: 0.75rem;
   color: #52525b;
   font-weight: 700;
 }
@@ -874,13 +887,13 @@ body {
 
 /* Minimal Footer */
 .canvas-footer {
-  margin-top: auto;
-  padding-top: 1.5rem;
+  margin-top: 2rem;
+  padding-top: 1.75rem;
   border-top: var(--border-thick);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.825rem;
+  font-size: 0.85rem;
   font-weight: 700;
   color: #3f3f46;
 }
@@ -888,23 +901,29 @@ body {
 .footer-health-notice {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.45rem;
   color: #000000;
   background-color: #fee2e2;
   border: 2px solid #000000;
-  padding: 0.35rem 0.75rem;
+  padding: 0.4rem 0.85rem;
   border-radius: var(--radius-pill);
   box-shadow: var(--shadow-neo-sm);
 }
 
 /* Responsive Media Queries (Up to 2) */
 @media (max-width: 1024px) {
+  .main-canvas {
+    padding: 1.5rem 1.75rem;
+  }
+
   .cards-row {
     grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
   }
 
   .bottom-grid {
     grid-template-columns: 1fr;
+    gap: 1.75rem;
   }
 }
 
@@ -929,6 +948,11 @@ body {
 
   .main-canvas {
     padding: 1.25rem 1rem;
+    gap: 1.5rem;
+  }
+
+  #view-container {
+    gap: 1.75rem;
   }
 
   .cards-row {

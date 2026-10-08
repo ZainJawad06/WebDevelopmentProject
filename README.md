@@ -1,36 +1,37 @@
 # MediRemind - Smart Medicine Reminder & Stock Tracker
 
-A modern, polished medicine reminder and stock tracking dashboard application built with **React**, **Vite**, **Supabase**, and **lucide-react**, styled after a sleek tablet interface.
+A modern, full-screen **Neobrutalist** medicine reminder and stock tracking web application built using **pure HTML, CSS, and vanilla JavaScript** (No React, No Vite, No build steps required!).
 
 ---
 
 ## Key Features
-- **Specific Medicine Entry**: Patients can input their exact prescription name, dosage, schedule time, custom stock count, and notes.
-- **Stock Tracking & Low-Stock Alerts**: Interactive stock level progress bar for each medicine. Taking a dose automatically decrements the stock count and displays a warning badge when below 5 doses.
-- **Pastel Dashboard Prescriptions**: Visual cards with warm yellow, lavender, and sky-blue pastel backgrounds.
-- **Schedule Management & Quick Search**: Live text search and category filter tabs (All, Pending, Taken, Low Stock).
-- **Slim Sidebar & Clean Top Bar**: Navigation icons with active tab indicators, notification bell, and user avatar.
+- **Enter Specific Medicines**: Custom patient form to input exact medicine name, dosage, schedule time, custom stock count, and notes.
+- **Interactive Stock Tracking**: Visual progress bar for each medicine. Taking a dose automatically decrements the stock, with a "Low Stock!" warning tag when doses fall below 5.
+- **Neobrutalism Design Aesthetic**: Stark black borders, solid offset drop shadows, vibrant pastel cards (Yellow, Lavender, Sky Blue), and physical press-down click animations.
+- **Multi-Section Views**: Interactive sidebar allowing instant switching between:
+  - **Overview Dashboard / Prescriptions**
+  - **Full Daily Intake Schedule**
+  - **Stock & Inventory Manager** (+5 Refill quick restock button)
+  - **Saved Prescriptions Library**
+- **Live Search & Category Filters**: Filter by All, Pending, Taken, Low Stock, plus instant text search.
+- **Zero-Blocker Supabase Sync**: Real-time cloud sync with Supabase, backed by automatic local storage fallback so the application works 100% of the time, even offline or before cloud database setup!
 
 ---
 
-## Quick Start
+## How to Run
 
-### 1. Install Dependencies
-```bash
-npm install
-```
+No installations, no npm packages, and no build commands needed!
 
-### 2. Start Dev Server
-```bash
-npm run dev
-```
+### Option 1: Direct in Browser
+Simply double-click or open [index.html](index.html) in any modern web browser (Chrome, Edge, Firefox, Safari).
 
-Visit `http://localhost:5173` in your browser.
+### Option 2: Live Server (Optional)
+If using VS Code, right-click `index.html` and select **"Open with Live Server"**.
 
 ---
 
 ## Supabase Database Setup
-Run this SQL script in the **Supabase SQL Editor**:
+To enable cloud sync across devices, run this SQL script in your **Supabase SQL Editor**:
 
 ```sql
 create table medicines (
@@ -54,12 +55,7 @@ using (true)
 with check (true);
 ```
 
-If you previously created the table without the `stock` column:
-```sql
-alter table medicines add column if not exists stock integer default 15;
-```
-
 ---
 
 ## Viva & Project Guide
-See [PROJECT_GUIDE.md](PROJECT_GUIDE.md) for the complete viva cheat-sheet, component breakdown, icon/animation guide, and "Where to Change What" quick reference table.
+See [PROJECT_GUIDE.md](PROJECT_GUIDE.md) for the complete viva cheat-sheet, icon guide, CSS animation mechanics, and the "Where to Change What" quick reference table.
