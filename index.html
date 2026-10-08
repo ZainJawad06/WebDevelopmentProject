@@ -59,8 +59,56 @@
       <main class="main-canvas">
         <!-- Top Navbar Header -->
         <header class="top-navbar">
-          <div class="nav-brand">
-            Welcome to <span>MediRemind</span>
+          <div class="top-navbar-main">
+            <div class="nav-brand">
+              Welcome to <span>MediRemind</span>
+            </div>
+
+            <div class="nav-user-group">
+              <!-- Sound Toggle Button -->
+              <button
+                type="button"
+                id="sound-toggle-btn"
+                class="nav-icon-btn"
+                onclick="toggleSound()"
+                title="Notification Sound: ON"
+              >
+                <i data-lucide="volume-2" id="sound-icon" style="width: 17px; height: 17px;"></i>
+              </button>
+
+              <!-- Cloud Connection Pill -->
+              <button
+                type="button"
+                id="cloud-status-pill"
+                class="filter-pill cloud-pill"
+                onclick="showCloudModal()"
+                title="Click for Supabase Cloud Database Status"
+              >
+                <span id="cloud-status-dot" style="width: 9px; height: 9px; border-radius: 50%; background-color: #ea580c; border: 1.5px solid #000;"></span>
+                <span id="cloud-status-text">Cloud Sync</span>
+              </button>
+
+              <!-- Notification Bell Button -->
+              <button
+                type="button"
+                id="nav-bell-btn"
+                class="nav-bell-btn"
+                title="Medication Reminders & Alerts"
+                onclick="toggleNotificationPanel()"
+              >
+                <i data-lucide="bell" style="width: 18px; height: 18px;"></i>
+                <span id="nav-bell-badge" class="nav-bell-dot"></span>
+              </button>
+
+              <!-- Profile Avatar -->
+              <div class="nav-profile">
+                <div class="nav-avatar">SJ</div>
+                <div class="nav-profile-text">
+                  <span class="nav-profile-name">Sarah Jenkins</span>
+                  <span class="nav-profile-role">Patient Portal</span>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="nav-search-wrap">
@@ -76,45 +124,56 @@
             </button>
           </div>
 
-          <div class="nav-user-group">
-            <!-- Cloud Connection Pill -->
-            <button
-              type="button"
-              id="cloud-status-pill"
-              class="filter-pill"
-              style="font-size: 0.78rem; padding: 0.35rem 0.85rem; display: flex; align-items: center; gap: 0.45rem;"
-              onclick="showCloudModal()"
-              title="Click for Supabase Cloud Database Status"
-            >
-              <span id="cloud-status-dot" style="width: 9px; height: 9px; border-radius: 50%; background-color: #ea580c; border: 1.5px solid #000;"></span>
-              <span id="cloud-status-text">Cloud Sync</span>
-            </button>
-
-            <button type="button" class="nav-bell-btn" title="Notifications" onclick="alert('No new medication alerts today.')">
-              <i data-lucide="bell" style="width: 18px; height: 18px;"></i>
-              <span class="nav-bell-dot"></span>
-            </button>
-
-            <div class="nav-profile">
-              <div class="nav-avatar">SJ</div>
-              <div class="nav-profile-text">
-                <span class="nav-profile-name">Sarah Jenkins</span>
-                <span class="nav-profile-role">Patient Portal</span>
+          <!-- Notification Dropdown Popover -->
+          <div id="notifications-panel" class="notifications-panel" style="display: none;">
+            <div class="panel-header">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="bell" style="width: 17px; height: 17px; color: var(--accent-coral);"></i>
+                <h4 style="font-weight: 900; font-size: 0.95rem; margin: 0;">Medication Alerts</h4>
               </div>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <button type="button" class="btn-panel-action" onclick="toggleSound()" title="Toggle Sound">
+                  <i data-lucide="volume-2" id="panel-sound-icon" style="width: 14px; height: 14px;"></i>
+                </button>
+                <button type="button" class="btn-panel-action" onclick="toggleNotificationPanel()" title="Close">
+                  <i data-lucide="x" style="width: 14px; height: 14px;"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="panel-alert-banner">
+              <div>
+                <div style="font-size: 0.76rem; font-weight: 800; text-transform: uppercase; color: #ea580c; display: flex; align-items: center; gap: 4px;">
+                  <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+                  <span>Live 12:00 Reminder Active</span>
+                </div>
+                <div style="font-size: 0.72rem; color: #52525b; font-weight: 600; margin-top: 2px;">
+                  Fires chime + pop-up when scheduled time arrives
+                </div>
+              </div>
+              <button type="button" class="btn-test-alert" onclick="testReminderAlert()" title="Test 12:00 Alarm Sound and Pop-up">
+                <i data-lucide="bell-ring" style="width: 13px; height: 13px;"></i>
+                <span>Test 12:00 Alert</span>
+              </button>
+            </div>
+
+            <div id="notifications-list" class="notifications-list">
+              <div class="notifications-empty">
+                <i data-lucide="bell-off" style="width: 22px; height: 22px; color: #a1a1aa;"></i>
+                <p>No new notifications yet.</p>
+              </div>
+            </div>
+
+            <div class="panel-footer">
+              <button type="button" class="btn-clear-notifications" onclick="clearNotificationHistory()">
+                Clear All Notifications
+              </button>
             </div>
           </div>
         </header>
 
-        <!-- Brief Notification Toast -->
-        <div id="status-banner" class="status-notification-banner" style="display: none;">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <i data-lucide="info" style="width: 16px; height: 16px;"></i>
-            <span id="status-text"></span>
-          </div>
-          <button type="button" onclick="closeStatusBanner()" style="background: transparent; border: none; cursor: pointer;">
-            <i data-lucide="x" style="width: 15px; height: 15px;"></i>
-          </button>
-        </div>
+        <!-- Floating Neo-Brutalist Toast Notifications Container -->
+        <div id="toast-container" class="toast-container"></div>
 
         <!-- VIEW CONTAINER -->
         <div id="view-container"></div>
@@ -155,6 +214,320 @@
       let searchQuery = '';
       let isCloudConnected = false;
 
+      // Sound & Notification System (Web Audio API Synthesizer)
+      let audioCtx = null;
+      let soundEnabled = true;
+      let notificationHistory = [];
+      const alertedReminders = new Set();
+
+      function getAudioContext() {
+        if (!audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) audioCtx = new AudioContextClass();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        return audioCtx;
+      }
+
+      // Unlock Web Audio on first user interaction
+      ['click', 'touchstart', 'keydown'].forEach((evt) => {
+        document.addEventListener(evt, () => getAudioContext(), { once: true, passive: true });
+      });
+
+      // Synthesizer chimes with Web Audio API
+      function playNotificationSound(type = 'default') {
+        if (!soundEnabled) return;
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
+          const now = ctx.currentTime;
+
+          if (type === 'alarm') {
+            // Melodic Ding-Dong sequence for "Medicine Timeee!!!"
+            const playTone = (freq, start, duration, gainLevel = 0.22, oscType = 'sine') => {
+              const osc = ctx.createOscillator();
+              const gain = ctx.createGain();
+              osc.type = oscType;
+              osc.frequency.setValueAtTime(freq, start);
+              gain.gain.setValueAtTime(gainLevel, start);
+              gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+              osc.connect(gain);
+              gain.connect(ctx.destination);
+              osc.start(start);
+              osc.stop(start + duration + 0.05);
+            };
+
+            // First Ding-Dong
+            playTone(659.25, now, 0.22, 0.25, 'sine');          // E5
+            playTone(880.00, now + 0.12, 0.35, 0.3, 'triangle'); // A5
+            // Second celebratory Ding-Dong (higher chime)
+            playTone(659.25, now + 0.35, 0.2, 0.22, 'sine');    // E5
+            playTone(1046.50, now + 0.48, 0.5, 0.35, 'triangle'); // C6
+          } else if (type === 'add') {
+            // Cheerful ascending chime (C5 -> E5 -> G5)
+            [523.25, 659.25, 783.99].forEach((freq, idx) => {
+              const osc = ctx.createOscillator();
+              const gain = ctx.createGain();
+              osc.type = 'triangle';
+              const st = now + idx * 0.07;
+              osc.frequency.setValueAtTime(freq, st);
+              gain.gain.setValueAtTime(0.2, st);
+              gain.gain.exponentialRampToValueAtTime(0.0001, st + 0.25);
+              osc.connect(gain);
+              gain.connect(ctx.destination);
+              osc.start(st);
+              osc.stop(st + 0.26);
+            });
+          } else if (type === 'delete') {
+            // Gentle descending tone
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(440, now);
+            osc.frequency.exponentialRampToValueAtTime(260, now + 0.24);
+            gain.gain.setValueAtTime(0.18, now);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.26);
+          } else {
+            // Default bright ping
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(587.33, now); // D5
+            osc.frequency.exponentialRampToValueAtTime(880, now + 0.08); // A5
+            gain.gain.setValueAtTime(0.2, now);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.26);
+          }
+        } catch (e) {
+          console.warn('Audio synthesis notice:', e);
+        }
+      }
+
+      function toggleSound() {
+        soundEnabled = !soundEnabled;
+        const icon = document.getElementById('sound-icon');
+        const panelIcon = document.getElementById('panel-sound-icon');
+        const soundBtn = document.getElementById('sound-toggle-btn');
+        const iconName = soundEnabled ? 'volume-2' : 'volume-x';
+        
+        if (icon) icon.setAttribute('data-lucide', iconName);
+        if (panelIcon) panelIcon.setAttribute('data-lucide', iconName);
+        if (soundBtn) soundBtn.title = soundEnabled ? 'Notification Sound: ON' : 'Notification Sound: MUTED';
+
+        lucide.createIcons();
+        if (soundEnabled) {
+          playNotificationSound('default');
+          showNotification({ title: 'Sound Enabled 🔊', message: 'Alert chimes and reminders will play audio.', type: 'info', soundType: 'default', skipSound: false });
+        } else {
+          showNotification({ title: 'Sound Muted 🔇', message: 'Notifications will appear silently.', type: 'info', soundType: 'default', skipSound: true });
+        }
+      }
+
+      function toggleNotificationPanel() {
+        const panel = document.getElementById('notifications-panel');
+        if (!panel) return;
+        const isHidden = panel.style.display === 'none' || panel.style.display === '';
+        panel.style.display = isHidden ? 'flex' : 'none';
+        if (isHidden) {
+          // Clear badge
+          const badge = document.getElementById('nav-bell-badge');
+          if (badge) badge.style.display = 'none';
+          updateNotificationPanelUI();
+        }
+      }
+
+      function updateNotificationBadge(show = true) {
+        const badge = document.getElementById('nav-bell-badge');
+        if (badge) badge.style.display = show ? 'block' : 'none';
+      }
+
+      function updateNotificationPanelUI() {
+        const listEl = document.getElementById('notifications-list');
+        if (!listEl) return;
+
+        if (notificationHistory.length === 0) {
+          listEl.innerHTML = `
+            <div class="notifications-empty">
+              <i data-lucide="bell-off" style="width: 22px; height: 22px; color: #a1a1aa;"></i>
+              <p>No recent medication alerts.</p>
+            </div>
+          `;
+        } else {
+          listEl.innerHTML = notificationHistory.map((item) => `
+            <div class="notif-history-item notif-${item.type}">
+              <div class="notif-item-header">
+                <span class="notif-item-title">${item.title}</span>
+                <span class="notif-item-time">${item.time}</span>
+              </div>
+              <p class="notif-item-msg">${item.message}</p>
+            </div>
+          `).join('');
+        }
+        lucide.createIcons();
+      }
+
+      function clearNotificationHistory() {
+        notificationHistory = [];
+        updateNotificationPanelUI();
+        updateNotificationBadge(false);
+      }
+
+      // Shows rich floating toast with sound and adds to notification history
+      function showNotification({ title, message, type = 'info', soundType = 'default', medId = null, duration = 4500, skipSound = false }) {
+        if (!skipSound && soundEnabled) {
+          playNotificationSound(soundType);
+        }
+
+        // Add to history
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        notificationHistory.unshift({ title, message, type, time: timeStr, medId });
+        if (notificationHistory.length > 20) notificationHistory.pop();
+        updateNotificationBadge(true);
+        updateNotificationPanelUI();
+
+        // Native browser notification if supported
+        if ('Notification' in window && Notification.permission === 'granted' && type === 'alarm') {
+          try {
+            new Notification(title, {
+              body: message,
+              icon: 'favicon.svg'
+            });
+          } catch (e) {}
+        }
+
+        // Render toast in container
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = `toast-item toast-${type}`;
+        if (type === 'alarm') toast.classList.add('alarm-pulse');
+
+        let iconName = 'bell';
+        if (type === 'success') iconName = 'check-circle';
+        else if (type === 'warning') iconName = 'alert-triangle';
+        else if (type === 'delete') iconName = 'trash-2';
+        else if (type === 'alarm') iconName = 'bell-ring';
+
+        toast.innerHTML = `
+          <div class="toast-icon-wrap toast-icon-${type}">
+            <i data-lucide="${iconName}" style="width: 18px; height: 18px;"></i>
+          </div>
+          <div class="toast-body">
+            <div class="toast-title">${title}</div>
+            <div class="toast-message">${message}</div>
+            ${medId && type === 'alarm' ? `
+              <div class="toast-action-row">
+                <button type="button" class="btn-toast-action" onclick="handleDoseFromAlarm(${medId}, this)">
+                  <i data-lucide="check" style="width: 13px; height: 13px;"></i>
+                  <span>Take Dose</span>
+                </button>
+              </div>
+            ` : ''}
+          </div>
+          <button type="button" class="toast-close-btn" onclick="dismissToast(this.parentElement)">
+            <i data-lucide="x" style="width: 14px; height: 14px;"></i>
+          </button>
+        `;
+
+        container.prepend(toast);
+        lucide.createIcons();
+
+        // Auto dismiss
+        setTimeout(() => {
+          dismissToast(toast);
+        }, duration);
+      }
+
+      function dismissToast(el) {
+        if (!el || el.dataset.dismissing) return;
+        el.dataset.dismissing = 'true';
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(-10px) scale(0.96)';
+        setTimeout(() => {
+          if (el.parentElement) el.parentElement.removeChild(el);
+        }, 220);
+      }
+
+      function handleDoseFromAlarm(medId, btnEl) {
+        const med = medicineList.find(m => m.id === medId);
+        if (med) {
+          handleToggleTaken(med.id, false, med.stock || 15);
+        }
+        const toast = btnEl.closest('.toast-item');
+        if (toast) dismissToast(toast);
+      }
+
+      // Instant 12:00 Reminder Alert Tester
+      function testReminderAlert() {
+        showNotification({
+          title: 'Medicine Timeee!!! 🔔',
+          message: "It is 12:00 — Time to take rantac (1 tablet)!",
+          type: 'alarm',
+          soundType: 'alarm',
+          medId: 101,
+          duration: 12000
+        });
+      }
+
+      // Backward-compatible alias for existing showToast
+      function showToast(message) {
+        showNotification({
+          title: 'Status Update',
+          message,
+          type: 'info',
+          soundType: 'default',
+          duration: 3500
+        });
+      }
+
+      // Check current time against all scheduled medicines every 3 seconds
+      function checkScheduledMedicineReminders() {
+        const now = new Date();
+        const hh = String(now.getHours()).padStart(2, '0');
+        const mm = String(now.getMinutes()).padStart(2, '0');
+        const currentTime = `${hh}:${mm}`;
+        const dateKey = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+
+        medicineList.forEach((med) => {
+          if (med.scheduled_time === currentTime && !med.is_taken) {
+            const reminderKey = `${dateKey}_${med.id}_${currentTime}`;
+            if (!alertedReminders.has(reminderKey)) {
+              alertedReminders.add(reminderKey);
+
+              showNotification({
+                title: 'Medicine Timeee!!! 🔔',
+                message: `It is ${currentTime} — Time to take ${med.name} (${med.dosage})!`,
+                type: 'alarm',
+                soundType: 'alarm',
+                medId: med.id,
+                duration: 12000
+              });
+            }
+          }
+        });
+      }
+
+      // Run reminder clock check
+      setInterval(checkScheduledMedicineReminders, 3000);
+
+      // Request browser notification permission politely
+      if ('Notification' in window && Notification.permission === 'default') {
+        setTimeout(() => {
+          Notification.requestPermission();
+        }, 4000);
+      }
+
       // Update the cloud status pill in the navbar
       function updateCloudStatusPill(connected) {
         isCloudConnected = connected;
@@ -169,25 +542,6 @@
             text.textContent = 'Cloud Pending';
           }
         }
-      }
-
-      // Shows auto-dismissing toast notification
-      function showToast(message) {
-        const banner = document.getElementById('status-banner');
-        const text = document.getElementById('status-text');
-        if (banner && text) {
-          text.textContent = message;
-          banner.style.display = 'flex';
-          lucide.createIcons();
-          setTimeout(() => {
-            banner.style.display = 'none';
-          }, 3500);
-        }
-      }
-
-      function closeStatusBanner() {
-        const banner = document.getElementById('status-banner');
-        if (banner) banner.style.display = 'none';
       }
 
       // Shows 1-click SQL setup dialog if cloud table is not ready
@@ -246,7 +600,12 @@
                 const { id, ...cleanData } = item;
                 await supabaseClient.from('medicines').insert([cleanData]);
               }
-              showToast('Synced local medicines to Supabase Cloud!');
+              showNotification({
+                title: 'Cloud Synced ☁️',
+                message: 'Synced local medicines to Supabase Cloud!',
+                type: 'success',
+                soundType: 'default'
+              });
             }
           }
         } catch (err) {
@@ -312,7 +671,13 @@
         stockInput.value = '30';
         notesInput.value = '';
 
-        showToast(`Registered ${name}!`);
+        // Notification popup with sound for new medicine!
+        showNotification({
+          title: 'Medicine Added 🎉',
+          message: `Registered ${name} (${dosage}) scheduled for ${scheduled_time}!`,
+          type: 'success',
+          soundType: 'add'
+        });
 
         // Sync to Supabase Cloud
         try {
@@ -327,7 +692,6 @@
               // Update with cloud database ID
               const syncedList = medicineList.map((m) => m.id === localId ? data[0] : m);
               saveLocally(syncedList);
-              showToast(`Synced ${name} to Supabase Cloud!`);
             } else if (error) {
               updateCloudStatusPill(false);
             }
@@ -342,13 +706,32 @@
         const updatedStatus = !currentStatus;
         const updatedStock = updatedStatus ? Math.max(0, currentStock - 1) : currentStock + 1;
 
+        let targetMedName = 'Medicine';
         const updatedList = medicineList.map((item) => {
           if (item.id === id) {
+            targetMedName = item.name;
             return { ...item, is_taken: updatedStatus, stock: updatedStock };
           }
           return item;
         });
         saveLocally(updatedList);
+
+        // Notification popup with sound for dose change!
+        if (updatedStatus) {
+          showNotification({
+            title: 'Dose Recorded ✅',
+            message: `Marked ${targetMedName} as taken. Remaining stock: ${updatedStock} doses.`,
+            type: 'info',
+            soundType: 'default'
+          });
+        } else {
+          showNotification({
+            title: 'Dose Restored 🔄',
+            message: `Restored ${targetMedName} to pending schedule.`,
+            type: 'info',
+            soundType: 'default'
+          });
+        }
 
         try {
           if (supabaseClient && isCloudConnected) {
@@ -360,15 +743,26 @@
         } catch (err) {}
       }
 
-      // Quick restock (+5 doses)
+      // Quick restock (+5 doses) with notification & sound
       function handleRestock(id) {
+        let targetMedName = 'Medicine';
+        let newStockCount = 0;
         const updatedList = medicineList.map((item) => {
           if (item.id === id) {
-            return { ...item, stock: (Number(item.stock) || 0) + 5 };
+            targetMedName = item.name;
+            newStockCount = (Number(item.stock) || 0) + 5;
+            return { ...item, stock: newStockCount };
           }
           return item;
         });
         saveLocally(updatedList);
+
+        showNotification({
+          title: 'Stock Refilled 📦',
+          message: `Added +5 doses to ${targetMedName}. Current stock: ${newStockCount} doses.`,
+          type: 'success',
+          soundType: 'add'
+        });
 
         try {
           if (supabaseClient && isCloudConnected) {
@@ -383,12 +777,19 @@
         } catch (err) {}
       }
 
-      // SUPABASE CALL: Deletes a medicine reminder
+      // SUPABASE CALL: Deletes a medicine reminder with notification & sound
       async function handleDeleteMedicine(id, name) {
         if (!confirm(`Remove ${name} from schedule?`)) return;
 
         const updatedList = medicineList.filter((item) => item.id !== id);
         saveLocally(updatedList);
+
+        showNotification({
+          title: 'Medicine Removed 🗑️',
+          message: `Removed ${name} from your schedule.`,
+          type: 'warning',
+          soundType: 'delete'
+        });
 
         try {
           if (supabaseClient && isCloudConnected) {
@@ -405,7 +806,7 @@
         navIds.forEach((id) => {
           const btn = document.getElementById(`nav-btn-${id}`);
           if (btn) {
-            if (id === section || (section === 'prescriptions' && id === 'dashboard')) {
+            if (id === section) {
               btn.classList.add('active');
             } else {
               btn.classList.remove('active');
@@ -414,6 +815,7 @@
         });
 
         renderApp();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
       // Filter Switching
