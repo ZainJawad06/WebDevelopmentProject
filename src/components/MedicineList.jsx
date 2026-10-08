@@ -8,6 +8,8 @@ function MedicineList(props) {
   const medicineList = props.medicineList;
   const isLoading = props.isLoading;
   const onDeleteMedicine = props.onDeleteMedicine;
+  const onToggleTaken = props.onToggleTaken;
+  const onSwitchToSchedule = props.onSwitchToSchedule;
 
   // Prompts before deleting a prescription
   function handleDelete(id, name) {
@@ -21,7 +23,16 @@ function MedicineList(props) {
     <div className="schedule-panel">
       <div className="panel-header-row">
         <h3 className="panel-title">Daily Intake Schedule</h3>
-        <span className="panel-subtitle-link">All Prescriptions</span>
+        {onSwitchToSchedule ? (
+          <button
+            type="button"
+            className="panel-subtitle-link"
+            style={{ background: 'transparent', border: 'none' }}
+            onClick={onSwitchToSchedule}
+          >
+            View all lessons &bull;
+          </button>
+        ) : null}
       </div>
 
       {isLoading ? (
@@ -43,9 +54,15 @@ function MedicineList(props) {
             return (
               <div key={item.id} className="schedule-row">
                 <div className="schedule-item-info">
-                  <div className={`schedule-bullet-pill ${item.is_taken ? 'taken' : ''}`}>
+                  <button
+                    type="button"
+                    className={`schedule-bullet-pill ${item.is_taken ? 'taken' : ''}`}
+                    style={{ border: 'none', cursor: 'pointer' }}
+                    onClick={() => onToggleTaken && onToggleTaken(item.id, item.is_taken, stockCount)}
+                    title={item.is_taken ? 'Mark as pending' : 'Mark as taken'}
+                  >
                     {item.is_taken ? <Check size={16} /> : <Clock size={16} />}
-                  </div>
+                  </button>
 
                   <div className="schedule-text-details">
                     <span className={`schedule-name ${item.is_taken ? 'strike' : ''}`}>
