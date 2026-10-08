@@ -1,46 +1,40 @@
 /* src/styles.css */
-/* Global stylesheet for the Medicine Reminder application styled after the tablet dashboard reference layout. */
+/* Global stylesheet for the Medicine Reminder application in full-screen Neobrutalism design style. */
 
 :root {
-  /* Reference Palette: Soft backdrop, dark sidebar, pastel cards, and coral accent */
-  --bg-page: #a6b7c4;
-  --bg-canvas: #ffffff;
-  --bg-sidebar: #1e2024;
-  --bg-dark-card: #222529;
-  
-  /* Primary Brand Accent */
+  /* Neobrutalist High-Contrast Color Palette */
+  --bg-page: #f6f6f3;
+  --bg-canvas: #fafaf8;
+  --bg-sidebar: #121214;
+  --bg-dark-card: #18181b;
+
+  /* Vibrant Accent Colors */
   --accent-coral: #ff5b36;
-  --accent-coral-hover: #ea4d29;
+  --accent-coral-hover: #e64522;
   --accent-yellow: #fed776;
   --accent-purple: #d8b4f8;
   --accent-blue: #9be2f5;
+  --accent-green: #86efac;
 
-  /* Pastel Card Colors from Reference Image */
+  /* Pastel Card Colors with bold strokes */
   --card-yellow: #fde68a;
   --card-purple: #e9d5ff;
   --card-blue: #bae6fd;
 
-  /* Neutral Text and Borders */
-  --text-dark: #191c20;
-  --text-muted: #64748b;
-  --text-subtle: #94a3b8;
-  --text-light: #ffffff;
-  --border-light: #e2e8f0;
-  --border-subtle: #f1f5f9;
+  /* Neobrutalism Core: Stark Black Strokes & Solid Drop Shadows */
+  --stroke-black: #000000;
+  --border-thick: 2.5px solid #000000;
+  --border-heavy: 3px solid #000000;
 
-  /* Status Colors */
-  --status-success: #16a34a;
-  --status-warning: #ea580c;
-  --status-danger: #dc2626;
+  /* Hard Unblurred Offset Shadows */
+  --shadow-neo-sm: 2px 2px 0px #000000;
+  --shadow-neo-md: 4px 4px 0px #000000;
+  --shadow-neo-lg: 6px 6px 0px #000000;
 
-  /* Layered Shadows & Radii */
-  --shadow-dashboard: 0 20px 40px -15px rgba(15, 23, 42, 0.25);
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 6px 12px -2px rgba(0, 0, 0, 0.08);
-
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
+  /* Corner Radii */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
   --radius-pill: 9999px;
 
   /* Soft and Polished Font */
@@ -57,25 +51,21 @@
 body {
   font-family: var(--font-stack);
   background-color: var(--bg-page);
-  color: var(--text-dark);
+  color: #000000;
   line-height: 1.45;
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
+  width: 100vw;
+  overflow-x: hidden;
 }
 
 /* Page Entry Fade-in Animation */
-/* Animates the tablet container opacity smoothly when mounting. */
+/* Animates container opacity smoothly when mounting. */
 @keyframes pageFadeIn {
   from {
     opacity: 0;
-    transform: scale(0.99);
   }
   to {
     opacity: 1;
-    transform: scale(1);
   }
 }
 
@@ -84,7 +74,7 @@ body {
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -100,23 +90,20 @@ body {
   }
 }
 
-/* Outer Dashboard Shell */
+/* Full Screen Dashboard Shell */
 .dashboard-shell {
-  width: 100%;
-  max-width: 1180px;
+  width: 100vw;
+  min-height: 100vh;
   background-color: var(--bg-canvas);
-  border-radius: 28px;
-  box-shadow: var(--shadow-dashboard);
   display: flex;
-  overflow: hidden;
-  min-height: 720px;
-  animation: pageFadeIn 0.35s ease-out;
+  animation: pageFadeIn 0.3s ease-out;
 }
 
-/* Slim Dark Sidebar */
+/* Slim Dark Sidebar with Neobrutalist Thick Border */
 .sidebar {
-  width: 72px;
+  width: 78px;
   background-color: var(--bg-sidebar);
+  border-right: var(--border-heavy);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -128,52 +115,63 @@ body {
 .sidebar-menu {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.1rem;
   align-items: center;
   width: 100%;
 }
 
 .sidebar-btn {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: var(--radius-md);
-  background: transparent;
-  border: none;
-  color: #71767f;
+  background-color: #27272a;
+  border: 2px solid transparent;
+  color: #a1a1aa;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  /* Smooth color and background transition on sidebar icon hover. */
-  transition: background-color 0.15s ease, color 0.15s ease;
+  /* Smooth transform and shadow transition for neobrutalist interactive clicks. */
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
 }
 
 .sidebar-btn:hover {
   color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.08);
+  border: 2px solid #000000;
+  background-color: #3f3f46;
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-neo-sm);
+}
+
+.sidebar-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: none;
 }
 
 .sidebar-btn.active {
   background-color: var(--accent-yellow);
-  color: #1e2024;
+  color: #000000;
+  border: 2px solid #000000;
+  box-shadow: var(--shadow-neo-sm);
 }
 
 .sidebar-footer {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.9rem;
   align-items: center;
 }
 
-/* Main Canvas Area */
+/* Main Full Screen Canvas */
 .main-canvas {
   flex: 1;
-  padding: 1.75rem 2rem;
+  padding: 1.75rem 2.5rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  background-color: #fcfdfe;
+  background-color: var(--bg-canvas);
   overflow-y: auto;
+  max-width: 100%;
 }
 
 /* Top Navbar Header */
@@ -181,108 +179,136 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 1.25rem;
   flex-wrap: wrap;
+  padding-bottom: 0.5rem;
 }
 
 .nav-brand {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: var(--text-dark);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #000000;
+  letter-spacing: -0.02em;
 }
 
 .nav-brand span {
   color: var(--accent-coral);
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 4px;
 }
 
 .nav-search-wrap {
   display: flex;
   align-items: center;
   background-color: #ffffff;
-  border: 1px solid var(--border-light);
+  border: var(--border-thick);
   border-radius: var(--radius-pill);
-  padding: 0.25rem 0.4rem 0.25rem 0.9rem;
-  width: 280px;
-  /* Smooth outline transition on search focus. */
-  transition: border-color 0.15s ease;
+  padding: 0.3rem 0.5rem 0.3rem 1rem;
+  width: 320px;
+  box-shadow: var(--shadow-neo-sm);
+  /* Smooth shadow change on search focus. */
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
 .nav-search-wrap:focus-within {
-  border-color: var(--accent-coral);
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-neo-md);
 }
 
 .nav-search-input {
   border: none;
   outline: none;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-family: inherit;
+  font-weight: 600;
   flex: 1;
   background: transparent;
-  color: var(--text-dark);
+  color: #000000;
 }
 
 .nav-search-btn {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: var(--radius-pill);
-  border: none;
+  border: 2px solid #000000;
   background-color: var(--accent-coral);
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  /* Smooth button click push. */
+  transition: transform 0.1s ease;
+}
+
+.nav-search-btn:active {
+  transform: scale(0.92);
 }
 
 .nav-user-group {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 1rem;
 }
 
 .nav-bell-btn {
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
   border-radius: var(--radius-pill);
-  border: 1px solid var(--border-light);
+  border: var(--border-thick);
   background-color: #ffffff;
+  box-shadow: var(--shadow-neo-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-dark);
+  color: #000000;
   cursor: pointer;
   position: relative;
+  /* Smooth button hover and click effect. */
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.nav-bell-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-neo-md);
+}
+
+.nav-bell-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
 }
 
 .nav-bell-dot {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 7px;
-  height: 7px;
+  top: 9px;
+  right: 9px;
+  width: 8px;
+  height: 8px;
   background-color: var(--accent-coral);
+  border: 1.5px solid #000000;
   border-radius: 50%;
 }
 
 .nav-profile {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.65rem;
 }
 
 .nav-avatar {
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
   border-radius: var(--radius-pill);
-  background-color: #fde68a;
-  color: #1e2024;
-  font-weight: 700;
-  font-size: 0.85rem;
+  background-color: var(--accent-yellow);
+  color: #000000;
+  font-weight: 800;
+  font-size: 0.9rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #ffffff;
-  box-shadow: var(--shadow-sm);
+  border: var(--border-thick);
+  box-shadow: var(--shadow-neo-sm);
 }
 
 .nav-profile-text {
@@ -291,17 +317,34 @@ body {
 }
 
 .nav-profile-name {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--text-dark);
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #000000;
 }
 
 .nav-profile-role {
   font-size: 0.72rem;
-  color: var(--text-subtle);
+  color: #52525b;
+  font-weight: 700;
 }
 
-/* Section Header & Category Pills */
+/* Status Banner */
+.status-notification-banner {
+  background-color: #fef08a;
+  border: var(--border-thick);
+  box-shadow: var(--shadow-neo-sm);
+  color: #000000;
+  padding: 0.75rem 1.1rem;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 700;
+  animation: slideUp 0.25s ease-out;
+}
+
+/* Section Header & Neobrutalist Filter Pills */
 .section-header-row {
   display: flex;
   align-items: center;
@@ -311,66 +354,75 @@ body {
 }
 
 .section-title {
-  font-size: 1.45rem;
-  font-weight: 800;
-  color: var(--text-dark);
-  letter-spacing: -0.02em;
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #000000;
+  letter-spacing: -0.03em;
 }
 
 .filter-pill-group {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
   flex-wrap: wrap;
 }
 
 .filter-pill {
-  border: 1px solid var(--border-light);
+  border: var(--border-thick);
   background-color: #ffffff;
-  color: var(--text-dark);
-  padding: 0.4rem 0.9rem;
+  color: #000000;
+  padding: 0.45rem 1rem;
   border-radius: var(--radius-pill);
-  font-size: 0.825rem;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 800;
   font-family: inherit;
   cursor: pointer;
-  /* Smooth pill background color transition on filter switch. */
-  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  box-shadow: var(--shadow-neo-sm);
+  /* Tactile button transition on click and hover. */
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
 }
 
 .filter-pill:hover {
-  border-color: #cbd5e1;
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-neo-md);
+}
+
+.filter-pill:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
 }
 
 .filter-pill.active {
-  background-color: #191c20;
+  background-color: #000000;
   color: #ffffff;
-  border-color: #191c20;
+  transform: translate(1px, 1px);
+  box-shadow: var(--shadow-neo-sm);
 }
 
-/* Top Prescriptions Cards Row (Reference Pastel 3-Card Row) */
+/* Top Prescriptions Cards Row (Neobrutalist Pastel Cards) */
 .cards-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 
 .prescription-card {
+  border: var(--border-heavy);
   border-radius: var(--radius-lg);
-  padding: 1.25rem;
+  padding: 1.35rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 200px;
-  position: relative;
-  /* Smooth hover lift and shadow transition on card hover. */
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  min-height: 220px;
+  box-shadow: var(--shadow-neo-md);
+  /* Interactive hover lift and offset shadow response. */
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
   animation: slideUp 0.3s ease-out;
 }
 
 .prescription-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
+  transform: translate(-3px, -3px);
+  box-shadow: var(--shadow-neo-lg);
 }
 
 .card-theme-yellow {
@@ -393,42 +445,34 @@ body {
 }
 
 .card-tag {
-  background-color: rgba(25, 28, 32, 0.85);
+  background-color: #000000;
   color: #ffffff;
-  font-size: 0.725rem;
-  font-weight: 700;
-  padding: 0.25rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.25rem 0.65rem;
   border-radius: var(--radius-pill);
+  border: 1.5px solid #000000;
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-}
-
-.card-tag-purple {
-  background-color: rgba(109, 40, 217, 0.85);
-}
-
-.card-tag-blue {
-  background-color: rgba(3, 105, 161, 0.85);
+  gap: 0.35rem;
 }
 
 .card-bookmark-icon {
-  color: #191c20;
-  opacity: 0.75;
+  color: #000000;
 }
 
 .card-medicine-title {
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: #191c20;
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #000000;
   margin-bottom: 0.25rem;
   line-height: 1.25;
 }
 
 .card-dosage-text {
-  font-size: 0.825rem;
-  color: #475569;
-  font-weight: 600;
+  font-size: 0.85rem;
+  color: #27272a;
+  font-weight: 700;
   margin-bottom: 1rem;
 }
 
@@ -437,36 +481,37 @@ body {
   margin-top: auto;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.45rem;
 }
 
 .stock-label-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #191c20;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #000000;
 }
 
 .progress-track {
   width: 100%;
-  height: 6px;
-  background-color: rgba(25, 28, 32, 0.15);
+  height: 9px;
+  background-color: #ffffff;
+  border: 2px solid #000000;
   border-radius: var(--radius-pill);
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background-color: #191c20;
+  background-color: #000000;
   border-radius: var(--radius-pill);
-  /* Smooth width animation for stock progress update. */
+  /* Smooth progress width update. */
   transition: width 0.3s ease;
 }
 
 .progress-fill.low-stock {
-  background-color: var(--status-danger);
+  background-color: var(--accent-coral);
 }
 
 .card-bottom-row {
@@ -481,53 +526,64 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.25rem 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.3rem 0.6rem;
   border-radius: var(--radius-sm);
-  background-color: rgba(255, 255, 255, 0.6);
-  color: #191c20;
+  background-color: #ffffff;
+  color: #000000;
+  border: 2px solid #000000;
+  box-shadow: var(--shadow-neo-sm);
 }
 
 .btn-continue {
   background-color: var(--accent-coral);
   color: #ffffff;
-  border: none;
-  font-weight: 700;
-  font-size: 0.8rem;
-  padding: 0.45rem 1rem;
+  border: var(--border-thick);
+  font-weight: 800;
+  font-size: 0.825rem;
+  padding: 0.5rem 1.15rem;
   border-radius: var(--radius-pill);
   cursor: pointer;
+  box-shadow: var(--shadow-neo-sm);
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  /* Smooth scale and background transition on button hover. */
-  transition: background-color 0.15s ease, transform 0.15s ease;
+  gap: 0.4rem;
+  /* Neobrutalist interactive tactile press animation. */
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
 }
 
 .btn-continue:hover {
   background-color: var(--accent-coral-hover);
-  transform: translateY(-1px);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-neo-md);
+}
+
+.btn-continue:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
 }
 
 .btn-continue.completed {
-  background-color: #16a34a;
+  background-color: var(--accent-green);
+  color: #000000;
 }
 
-/* Bottom Split Section (Schedule Table & Dark Form Card) */
+/* Bottom Split Layout */
 .bottom-grid {
   display: grid;
   grid-template-columns: 1.55fr 1fr;
-  gap: 1.25rem;
+  gap: 1.5rem;
   align-items: stretch;
 }
 
-/* Left Panel: White Schedule Card */
+/* Left Panel: Neobrutalist Schedule Panel */
 .schedule-panel {
   background-color: #ffffff;
-  border: 1px solid var(--border-light);
+  border: var(--border-heavy);
   border-radius: var(--radius-lg);
-  padding: 1.35rem 1.5rem;
+  padding: 1.5rem 1.75rem;
+  box-shadow: var(--shadow-neo-md);
   display: flex;
   flex-direction: column;
 }
@@ -536,67 +592,81 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 1.1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 2px solid #000000;
 }
 
 .panel-title {
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: var(--text-dark);
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #000000;
 }
 
 .panel-subtitle-link {
-  font-size: 0.8rem;
-  font-weight: 700;
+  font-size: 0.85rem;
+  font-weight: 800;
   color: var(--accent-coral);
   cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-/* Schedule Items List */
 .schedule-list {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.75rem;
 }
 
 .schedule-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.65rem 0.5rem;
-  border-radius: var(--radius-sm);
-  /* Smooth row hover background transition. */
-  transition: background-color 0.15s ease;
+  padding: 0.75rem 0.85rem;
+  border-radius: var(--radius-md);
+  border: 2px solid #e4e4e7;
+  background-color: #fafafa;
+  /* Smooth row hover color and border transition. */
+  transition: border-color 0.12s ease, background-color 0.12s ease, transform 0.12s ease;
 }
 
 .schedule-row:hover {
-  background-color: #f8fafc;
+  background-color: #ffffff;
+  border-color: #000000;
+  transform: translateX(2px);
 }
 
 .schedule-item-info {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 0.95rem;
   flex: 1;
 }
 
 .schedule-bullet-pill {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background-color: #f1f5f9;
+  background-color: #fed7aa;
+  border: 2px solid #000000;
+  box-shadow: var(--shadow-neo-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--accent-coral);
+  color: #000000;
   flex-shrink: 0;
+  cursor: pointer;
+  /* Interactive click spring for bullet. */
+  transition: transform 0.12s ease;
+}
+
+.schedule-bullet-pill:active {
+  transform: scale(0.9);
 }
 
 .schedule-bullet-pill.taken {
-  background-color: #dcfce7;
-  color: var(--status-success);
+  background-color: var(--accent-green);
+  color: #000000;
 }
 
 .schedule-text-details {
@@ -605,19 +675,21 @@ body {
 }
 
 .schedule-name {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: var(--text-dark);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #000000;
 }
 
 .schedule-name.strike {
   text-decoration: line-through;
-  color: var(--text-subtle);
+  text-decoration-thickness: 2px;
+  color: #71717a;
 }
 
 .schedule-sub {
-  font-size: 0.75rem;
-  color: var(--text-muted);
+  font-size: 0.78rem;
+  color: #52525b;
+  font-weight: 600;
 }
 
 .schedule-meta-right {
@@ -628,139 +700,161 @@ body {
 
 .schedule-stock-tag {
   font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.2rem 0.55rem;
+  font-weight: 800;
+  padding: 0.25rem 0.6rem;
   border-radius: var(--radius-pill);
-  background-color: #f1f5f9;
-  color: #475569;
+  background-color: #ffffff;
+  color: #000000;
+  border: 2px solid #000000;
+  box-shadow: var(--shadow-neo-sm);
 }
 
 .schedule-stock-tag.warning {
-  background-color: #fee2e2;
-  color: var(--status-danger);
+  background-color: #fca5a5;
+  color: #000000;
 }
 
 .schedule-time-label {
-  font-size: 0.825rem;
-  font-weight: 700;
-  color: var(--text-dark);
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #000000;
   min-width: 65px;
   text-align: right;
 }
 
 .schedule-action-btn {
-  background: transparent;
-  border: none;
+  background-color: #fee2e2;
+  border: 2px solid #000000;
+  box-shadow: var(--shadow-neo-sm);
   cursor: pointer;
-  color: var(--text-subtle);
+  color: #dc2626;
   display: flex;
   align-items: center;
-  padding: 0.3rem;
-  border-radius: 4px;
-  /* Smooth trash color hover transition. */
-  transition: color 0.15s ease;
+  padding: 0.4rem;
+  border-radius: var(--radius-sm);
+  /* Interactive button click transition. */
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
 .schedule-action-btn:hover {
-  color: var(--status-danger);
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-neo-md);
 }
 
-/* Right Panel: Dark Card for Adding Specific Medicine (Reference Style) */
+.schedule-action-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+/* Right Panel: Neobrutalist Dark Add-Medicine Form */
 .dark-form-panel {
   background-color: var(--bg-dark-card);
   color: #ffffff;
+  border: var(--border-heavy);
   border-radius: var(--radius-lg);
-  padding: 1.5rem;
+  padding: 1.65rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-neo-md);
 }
 
 .dark-card-tag {
   background-color: var(--accent-yellow);
-  color: #1e2024;
-  font-size: 0.725rem;
-  font-weight: 800;
-  padding: 0.25rem 0.65rem;
+  color: #000000;
+  font-size: 0.75rem;
+  font-weight: 900;
+  padding: 0.25rem 0.75rem;
   border-radius: var(--radius-pill);
+  border: 2px solid #000000;
+  box-shadow: var(--shadow-neo-sm);
   display: inline-block;
   align-self: flex-start;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.85rem;
 }
 
 .dark-card-title {
-  font-size: 1.25rem;
-  font-weight: 800;
+  font-size: 1.35rem;
+  font-weight: 900;
   line-height: 1.3;
-  margin-bottom: 1rem;
+  margin-bottom: 1.1rem;
 }
 
 .dark-form-fields {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.85rem;
 }
 
 .dark-input-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.6rem;
+  gap: 0.75rem;
 }
 
 .dark-input {
   width: 100%;
-  padding: 0.55rem 0.75rem;
-  background-color: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.65rem 0.85rem;
+  background-color: #27272a;
+  border: 2px solid #000000;
+  box-shadow: var(--shadow-neo-sm);
   border-radius: var(--radius-sm);
   color: #ffffff;
-  font-size: 0.825rem;
+  font-size: 0.85rem;
   font-family: inherit;
+  font-weight: 600;
   outline: none;
-  /* Smooth border highlight on dark input focus. */
-  transition: border-color 0.15s ease, background-color 0.15s ease;
+  /* Smooth input outline transition on focus. */
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
 }
 
 .dark-input:focus {
-  border-color: var(--accent-coral);
-  background-color: rgba(255, 255, 255, 0.12);
+  border-color: var(--accent-yellow);
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-neo-md);
 }
 
 .dark-input::placeholder {
-  color: #8b929a;
+  color: #a1a1aa;
 }
 
 .btn-dark-submit {
   width: 100%;
   background-color: var(--accent-coral);
   color: #ffffff;
-  border: none;
-  font-weight: 800;
-  font-size: 0.9rem;
-  padding: 0.75rem 1rem;
+  border: var(--border-heavy);
+  box-shadow: var(--shadow-neo-md);
+  font-weight: 900;
+  font-size: 0.95rem;
+  padding: 0.85rem 1rem;
   border-radius: var(--radius-md);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
-  margin-top: 1rem;
-  /* Smooth button hover transition. */
-  transition: background-color 0.15s ease, transform 0.15s ease;
+  gap: 0.5rem;
+  margin-top: 1.1rem;
+  /* Tactile button press effect on active click. */
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
 }
 
 .btn-dark-submit:hover:not(:disabled) {
   background-color: var(--accent-coral-hover);
-  transform: translateY(-1px);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-neo-lg);
+}
+
+.btn-dark-submit:active:not(:disabled) {
+  transform: translate(3px, 3px);
+  box-shadow: none;
 }
 
 .btn-dark-submit:disabled {
-  opacity: 0.65;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* States & Banners */
+/* States & Empty Box */
 .state-box {
   padding: 2.5rem 1rem;
   text-align: center;
@@ -769,61 +863,41 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  color: var(--text-muted);
+  color: #52525b;
+  font-weight: 700;
 }
 
 .state-spinner {
   animation: spin 0.8s linear infinite;
-  color: var(--accent-coral);
-}
-
-.error-strip {
-  background-color: #fee2e2;
-  color: var(--status-danger);
-  border: 1px solid #fecaca;
-  padding: 0.65rem 1rem;
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-.status-notification-banner {
-  background-color: #f8fafc;
-  border: 1px solid #cbd5e1;
-  color: #334155;
-  padding: 0.65rem 1rem;
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.825rem;
-  font-weight: 600;
+  color: #000000;
 }
 
 /* Minimal Footer */
 .canvas-footer {
   margin-top: auto;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border-subtle);
+  padding-top: 1.5rem;
+  border-top: var(--border-thick);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.78rem;
-  color: var(--text-subtle);
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: #3f3f46;
 }
 
 .footer-health-notice {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  color: var(--accent-coral);
-  font-weight: 600;
+  gap: 0.4rem;
+  color: #000000;
+  background-color: #fee2e2;
+  border: 2px solid #000000;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-neo-sm);
 }
 
-/* Responsive Media Queries (2 max) */
+/* Responsive Media Queries (Up to 2) */
 @media (max-width: 1024px) {
   .cards-row {
     grid-template-columns: repeat(2, 1fr);
@@ -835,19 +909,16 @@ body {
 }
 
 @media (max-width: 640px) {
-  body {
-    padding: 0.5rem;
-  }
-
   .dashboard-shell {
     flex-direction: column;
-    border-radius: 16px;
   }
 
   .sidebar {
     width: 100%;
     height: auto;
     flex-direction: row;
+    border-right: none;
+    border-bottom: var(--border-heavy);
     padding: 0.75rem 1rem;
   }
 
