@@ -11,7 +11,7 @@ function Footer() {
         <ShieldCheck size={16} />
         <span>Always consult your physician before altering prescribed dosages.</span>
       </div>
-      <p>MediRemind Digital Tracker &bull; Powered by React &amp; Supabase</p>
+      <p>MediRemind Digital Tracker &bull; Prepared by AIML C1</p>
     </footer>
   );
 }
