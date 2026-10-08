@@ -1,7 +1,7 @@
 # MediRemind - Medicine Reminder & Stock Tracker Web Application
 
-> **Project Credit**: Prepared by AIML C1  
-> **Live Deployed Demo**: [https://temporary-agile-oboe-rqlhc9l.vercel.app](https://temporary-agile-oboe-rqlhc9l.vercel.app)
+> **Project Credit**: Prepared by AIML C1   
+> **Live Deployed Demo**: https://mediassist-omega.vercel.app/
 
 ---
 
