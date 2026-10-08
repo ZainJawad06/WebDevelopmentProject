@@ -1,0 +1,857 @@
+/* src/styles.css */
+/* Global stylesheet for the Medicine Reminder application styled after the tablet dashboard reference layout. */
+
+:root {
+  /* Reference Palette: Soft backdrop, dark sidebar, pastel cards, and coral accent */
+  --bg-page: #a6b7c4;
+  --bg-canvas: #ffffff;
+  --bg-sidebar: #1e2024;
+  --bg-dark-card: #222529;
+  
+  /* Primary Brand Accent */
+  --accent-coral: #ff5b36;
+  --accent-coral-hover: #ea4d29;
+  --accent-yellow: #fed776;
+  --accent-purple: #d8b4f8;
+  --accent-blue: #9be2f5;
+
+  /* Pastel Card Colors from Reference Image */
+  --card-yellow: #fde68a;
+  --card-purple: #e9d5ff;
+  --card-blue: #bae6fd;
+
+  /* Neutral Text and Borders */
+  --text-dark: #191c20;
+  --text-muted: #64748b;
+  --text-subtle: #94a3b8;
+  --text-light: #ffffff;
+  --border-light: #e2e8f0;
+  --border-subtle: #f1f5f9;
+
+  /* Status Colors */
+  --status-success: #16a34a;
+  --status-warning: #ea580c;
+  --status-danger: #dc2626;
+
+  /* Layered Shadows & Radii */
+  --shadow-dashboard: 0 20px 40px -15px rgba(15, 23, 42, 0.25);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 6px 12px -2px rgba(0, 0, 0, 0.08);
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 9999px;
+
+  /* Soft and Polished Font */
+  --font-stack: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+/* Base Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-stack);
+  background-color: var(--bg-page);
+  color: var(--text-dark);
+  line-height: 1.45;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+/* Page Entry Fade-in Animation */
+/* Animates the tablet container opacity smoothly when mounting. */
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* List Item Slide-up Animation */
+/* Smoothly shifts cards and list rows upward on load. */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Spinner Rotation Keyframes */
+/* Continuously spins the loading icon during network requests. */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Outer Dashboard Shell */
+.dashboard-shell {
+  width: 100%;
+  max-width: 1180px;
+  background-color: var(--bg-canvas);
+  border-radius: 28px;
+  box-shadow: var(--shadow-dashboard);
+  display: flex;
+  overflow: hidden;
+  min-height: 720px;
+  animation: pageFadeIn 0.35s ease-out;
+}
+
+/* Slim Dark Sidebar */
+.sidebar {
+  width: 72px;
+  background-color: var(--bg-sidebar);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 0.5rem;
+  flex-shrink: 0;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  align-items: center;
+  width: 100%;
+}
+
+.sidebar-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: none;
+  color: #71767f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  /* Smooth color and background transition on sidebar icon hover. */
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.sidebar-btn:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-btn.active {
+  background-color: var(--accent-yellow);
+  color: #1e2024;
+}
+
+.sidebar-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* Main Canvas Area */
+.main-canvas {
+  flex: 1;
+  padding: 1.75rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background-color: #fcfdfe;
+  overflow-y: auto;
+}
+
+/* Top Navbar Header */
+.top-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.nav-brand {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.nav-brand span {
+  color: var(--accent-coral);
+}
+
+.nav-search-wrap {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-pill);
+  padding: 0.25rem 0.4rem 0.25rem 0.9rem;
+  width: 280px;
+  /* Smooth outline transition on search focus. */
+  transition: border-color 0.15s ease;
+}
+
+.nav-search-wrap:focus-within {
+  border-color: var(--accent-coral);
+}
+
+.nav-search-input {
+  border: none;
+  outline: none;
+  font-size: 0.85rem;
+  font-family: inherit;
+  flex: 1;
+  background: transparent;
+  color: var(--text-dark);
+}
+
+.nav-search-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-pill);
+  border: none;
+  background-color: var(--accent-coral);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.nav-user-group {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.nav-bell-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-light);
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dark);
+  cursor: pointer;
+  position: relative;
+}
+
+.nav-bell-dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 7px;
+  height: 7px;
+  background-color: var(--accent-coral);
+  border-radius: 50%;
+}
+
+.nav-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-pill);
+  background-color: #fde68a;
+  color: #1e2024;
+  font-weight: 700;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ffffff;
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-profile-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-profile-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.nav-profile-role {
+  font-size: 0.72rem;
+  color: var(--text-subtle);
+}
+
+/* Section Header & Category Pills */
+.section-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.section-title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  letter-spacing: -0.02em;
+}
+
+.filter-pill-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-pill {
+  border: 1px solid var(--border-light);
+  background-color: #ffffff;
+  color: var(--text-dark);
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.825rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  /* Smooth pill background color transition on filter switch. */
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.filter-pill:hover {
+  border-color: #cbd5e1;
+}
+
+.filter-pill.active {
+  background-color: #191c20;
+  color: #ffffff;
+  border-color: #191c20;
+}
+
+/* Top Prescriptions Cards Row (Reference Pastel 3-Card Row) */
+.cards-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.prescription-card {
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 200px;
+  position: relative;
+  /* Smooth hover lift and shadow transition on card hover. */
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  animation: slideUp 0.3s ease-out;
+}
+
+.prescription-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.card-theme-yellow {
+  background-color: var(--card-yellow);
+}
+
+.card-theme-purple {
+  background-color: var(--card-purple);
+}
+
+.card-theme-blue {
+  background-color: var(--card-blue);
+}
+
+.card-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.card-tag {
+  background-color: rgba(25, 28, 32, 0.85);
+  color: #ffffff;
+  font-size: 0.725rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.card-tag-purple {
+  background-color: rgba(109, 40, 217, 0.85);
+}
+
+.card-tag-blue {
+  background-color: rgba(3, 105, 161, 0.85);
+}
+
+.card-bookmark-icon {
+  color: #191c20;
+  opacity: 0.75;
+}
+
+.card-medicine-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #191c20;
+  margin-bottom: 0.25rem;
+  line-height: 1.25;
+}
+
+.card-dosage-text {
+  font-size: 0.825rem;
+  color: #475569;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* Progress / Stock Bar */
+.card-stock-section {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.stock-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #191c20;
+}
+
+.progress-track {
+  width: 100%;
+  height: 6px;
+  background-color: rgba(25, 28, 32, 0.15);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #191c20;
+  border-radius: var(--radius-pill);
+  /* Smooth width animation for stock progress update. */
+  transition: width 0.3s ease;
+}
+
+.progress-fill.low-stock {
+  background-color: var(--status-danger);
+}
+
+.card-bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+  gap: 0.5rem;
+}
+
+.stock-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  background-color: rgba(255, 255, 255, 0.6);
+  color: #191c20;
+}
+
+.btn-continue {
+  background-color: var(--accent-coral);
+  color: #ffffff;
+  border: none;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  /* Smooth scale and background transition on button hover. */
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.btn-continue:hover {
+  background-color: var(--accent-coral-hover);
+  transform: translateY(-1px);
+}
+
+.btn-continue.completed {
+  background-color: #16a34a;
+}
+
+/* Bottom Split Section (Schedule Table & Dark Form Card) */
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+/* Left Panel: White Schedule Card */
+.schedule-panel {
+  background-color: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 1.35rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.panel-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.panel-subtitle-link {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent-coral);
+  cursor: pointer;
+}
+
+/* Schedule Items List */
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.schedule-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.5rem;
+  border-radius: var(--radius-sm);
+  /* Smooth row hover background transition. */
+  transition: background-color 0.15s ease;
+}
+
+.schedule-row:hover {
+  background-color: #f8fafc;
+}
+
+.schedule-item-info {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex: 1;
+}
+
+.schedule-bullet-pill {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-coral);
+  flex-shrink: 0;
+}
+
+.schedule-bullet-pill.taken {
+  background-color: #dcfce7;
+  color: var(--status-success);
+}
+
+.schedule-text-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.schedule-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.schedule-name.strike {
+  text-decoration: line-through;
+  color: var(--text-subtle);
+}
+
+.schedule-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.schedule-meta-right {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.schedule-stock-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-pill);
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.schedule-stock-tag.warning {
+  background-color: #fee2e2;
+  color: var(--status-danger);
+}
+
+.schedule-time-label {
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  min-width: 65px;
+  text-align: right;
+}
+
+.schedule-action-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-subtle);
+  display: flex;
+  align-items: center;
+  padding: 0.3rem;
+  border-radius: 4px;
+  /* Smooth trash color hover transition. */
+  transition: color 0.15s ease;
+}
+
+.schedule-action-btn:hover {
+  color: var(--status-danger);
+}
+
+/* Right Panel: Dark Card for Adding Specific Medicine (Reference Style) */
+.dark-form-panel {
+  background-color: var(--bg-dark-card);
+  color: #ffffff;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow-md);
+}
+
+.dark-card-tag {
+  background-color: var(--accent-yellow);
+  color: #1e2024;
+  font-size: 0.725rem;
+  font-weight: 800;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-pill);
+  display: inline-block;
+  align-self: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.dark-card-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 1rem;
+}
+
+.dark-form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.dark-input-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.dark-input {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-sm);
+  color: #ffffff;
+  font-size: 0.825rem;
+  font-family: inherit;
+  outline: none;
+  /* Smooth border highlight on dark input focus. */
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.dark-input:focus {
+  border-color: var(--accent-coral);
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.dark-input::placeholder {
+  color: #8b929a;
+}
+
+.btn-dark-submit {
+  width: 100%;
+  background-color: var(--accent-coral);
+  color: #ffffff;
+  border: none;
+  font-weight: 800;
+  font-size: 0.9rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 1rem;
+  /* Smooth button hover transition. */
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.btn-dark-submit:hover:not(:disabled) {
+  background-color: var(--accent-coral-hover);
+  transform: translateY(-1px);
+}
+
+.btn-dark-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* States & Banners */
+.state-box {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  color: var(--text-muted);
+}
+
+.state-spinner {
+  animation: spin 0.8s linear infinite;
+  color: var(--accent-coral);
+}
+
+.error-strip {
+  background-color: #fee2e2;
+  color: var(--status-danger);
+  border: 1px solid #fecaca;
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* Minimal Footer */
+.canvas-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--text-subtle);
+}
+
+.footer-health-notice {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--accent-coral);
+  font-weight: 600;
+}
+
+/* Responsive Media Queries (2 max) */
+@media (max-width: 1024px) {
+  .cards-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    padding: 0.5rem;
+  }
+
+  .dashboard-shell {
+    flex-direction: column;
+    border-radius: 16px;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    padding: 0.75rem 1rem;
+  }
+
+  .sidebar-menu {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .main-canvas {
+    padding: 1.25rem 1rem;
+  }
+
+  .cards-row {
+    grid-template-columns: 1fr;
+  }
+
+  .dark-input-row {
+    grid-template-columns: 1fr;
+  }
+}
