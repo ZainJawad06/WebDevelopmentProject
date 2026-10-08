@@ -179,28 +179,23 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.5rem;
-  flex-wrap: wrap;
+  gap: 1.25rem;
   padding-bottom: 1.25rem;
   border-bottom: 2px solid #e4e4e7;
   position: relative;
-}
-
-.top-navbar-main {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  flex: 1;
+  width: 100%;
 }
 
 .nav-brand {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 900;
   color: #000000;
   letter-spacing: -0.02em;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
+.nav-brand .brand-name,
 .nav-brand span {
   color: var(--accent-coral);
   text-decoration: underline;
@@ -215,10 +210,11 @@ body {
   border: var(--border-thick);
   border-radius: var(--radius-pill);
   padding: 0.35rem 0.6rem 0.35rem 1.15rem;
-  width: 340px;
+  width: 320px;
+  max-width: 100%;
   box-shadow: var(--shadow-neo-sm);
-  /* Smooth shadow change on search focus. */
   transition: transform 0.12s ease, box-shadow 0.12s ease;
+  flex-shrink: 1;
 }
 
 .nav-search-wrap:focus-within {
@@ -1321,59 +1317,77 @@ body {
     overflow-x: hidden;
   }
 
-  /* Top Navbar on Mobile: Clean 2-Row Layout */
+  /* Top Navbar on Mobile: CSS Grid 2-Row Layout */
   .top-navbar {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "brand actions"
+      "search search";
     gap: 0.75rem;
     padding-bottom: 0.85rem;
+    align-items: center;
+    width: 100%;
     position: relative;
   }
 
-  .top-navbar-main {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    gap: 0.5rem;
-  }
-
   .nav-brand {
+    grid-area: brand;
     font-size: 1.25rem;
     letter-spacing: -0.02em;
     white-space: nowrap;
+    min-width: 0;
+  }
+
+  /* On mobile screens, hide 'Welcome to ' so only 'MediRemind' is displayed */
+  .nav-brand .brand-prefix {
+    display: none !important;
   }
 
   .nav-user-group {
+    grid-area: actions;
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.35rem;
+    justify-content: flex-end;
+    flex-shrink: 0;
   }
 
+  /* Hide verbose text labels on mobile header so everything fits neatly without clipping */
   .nav-profile-text {
     display: none !important;
   }
 
-  .nav-avatar {
-    width: 38px;
-    height: 38px;
-    font-size: 0.82rem;
+  .cloud-pill .cloud-text {
+    display: none !important;
+  }
+
+  .cloud-pill {
+    padding: 0.4rem 0.55rem !important;
+    min-width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .nav-icon-btn,
   .nav-bell-btn {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
   }
 
-  .cloud-pill {
-    padding: 0.35rem 0.65rem !important;
-    font-size: 0.72rem !important;
+  .nav-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 0.82rem;
+    flex-shrink: 0;
   }
 
-  /* Search bar spans full width without horizontal overflow */
+  /* Search bar spans full row without horizontal overflow */
   .nav-search-wrap {
+    grid-area: search;
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;

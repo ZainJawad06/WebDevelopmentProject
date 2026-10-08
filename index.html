@@ -59,54 +59,65 @@
       <main class="main-canvas">
         <!-- Top Navbar Header -->
         <header class="top-navbar">
-          <div class="top-navbar-main">
-            <div class="nav-brand">
-              Welcome to <span>MediRemind</span>
-            </div>
+          <div class="nav-brand">
+            <span class="brand-prefix">Welcome to </span><span class="brand-name">MediRemind</span>
+          </div>
 
-            <div class="nav-user-group">
-              <!-- Sound Toggle Button -->
-              <button
-                type="button"
-                id="sound-toggle-btn"
-                class="nav-icon-btn"
-                onclick="toggleSound()"
-                title="Notification Sound: ON"
-              >
-                <i data-lucide="volume-2" id="sound-icon" style="width: 17px; height: 17px;"></i>
-              </button>
+          <div class="nav-search-wrap">
+            <input
+              type="text"
+              id="search-input"
+              class="nav-search-input"
+              placeholder="Search your medicines..."
+              oninput="handleSearch(this.value)"
+            />
+            <button type="button" class="nav-search-btn" title="Search">
+              <i data-lucide="search" style="width: 15px; height: 15px;"></i>
+            </button>
+          </div>
 
-              <!-- Cloud Connection Pill -->
-              <button
-                type="button"
-                id="cloud-status-pill"
-                class="filter-pill cloud-pill"
-                onclick="showCloudModal()"
-                title="Click for Supabase Cloud Database Status"
-              >
-                <span id="cloud-status-dot" style="width: 9px; height: 9px; border-radius: 50%; background-color: #ea580c; border: 1.5px solid #000;"></span>
-                <span id="cloud-status-text">Cloud Sync</span>
-              </button>
+          <div class="nav-user-group">
+            <!-- Sound Toggle Button -->
+            <button
+              type="button"
+              id="sound-toggle-btn"
+              class="nav-icon-btn"
+              onclick="toggleSound()"
+              title="Notification Sound: ON"
+            >
+              <i data-lucide="volume-2" id="sound-icon" style="width: 17px; height: 17px;"></i>
+            </button>
 
-              <!-- Notification Bell Button -->
-              <button
-                type="button"
-                id="nav-bell-btn"
-                class="nav-bell-btn"
-                title="Medication Reminders & Alerts"
-                onclick="toggleNotificationPanel()"
-              >
-                <i data-lucide="bell" style="width: 18px; height: 18px;"></i>
-                <span id="nav-bell-badge" class="nav-bell-dot"></span>
-              </button>
+            <!-- Cloud Connection Pill -->
+            <button
+              type="button"
+              id="cloud-status-pill"
+              class="filter-pill cloud-pill"
+              onclick="showCloudModal()"
+              title="Click for Supabase Cloud Database Status"
+            >
+              <span id="cloud-status-dot" style="width: 9px; height: 9px; border-radius: 50%; background-color: #ea580c; border: 1.5px solid #000; flex-shrink: 0;"></span>
+              <span id="cloud-status-text" class="cloud-text">Cloud Sync</span>
+            </button>
 
-              <!-- Profile Avatar -->
-              <div class="nav-profile">
-                <div class="nav-avatar">SJ</div>
-                <div class="nav-profile-text">
-                  <span class="nav-profile-name">Sarah Jenkins</span>
-                  <span class="nav-profile-role">Patient Portal</span>
-                </div>
+            <!-- Notification Bell Button -->
+            <button
+              type="button"
+              id="nav-bell-btn"
+              class="nav-bell-btn"
+              title="Medication Reminders & Alerts"
+              onclick="toggleNotificationPanel()"
+            >
+              <i data-lucide="bell" style="width: 18px; height: 18px;"></i>
+              <span id="nav-bell-badge" class="nav-bell-dot"></span>
+            </button>
+
+            <!-- Profile Avatar -->
+            <div class="nav-profile">
+              <div class="nav-avatar">SJ</div>
+              <div class="nav-profile-text">
+                <span class="nav-profile-name">Sarah Jenkins</span>
+                <span class="nav-profile-role">Patient Portal</span>
               </div>
             </div>
           </div>
